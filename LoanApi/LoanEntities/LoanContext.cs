@@ -20,15 +20,28 @@ namespace LoanEntities
         public DbSet<ClientPhoneContact> ClientPhoneContacts { get; set; }
         public DbSet<ClientAddressContact> ClientAddressContacts { get; set; }
 
+
+        public DbSet<ContactType> ContactTypes { get; set; }
         public DbSet<PrimaryContact> PrimaryContactType { get; set; }
         public DbSet<SecondaryContact> SecondaryContactType { get; set; }
 
+        public DbSet<AccountOwnerType> AccountOwnerTypes { get; set; }
+        public DbSet<PrimaryAccountOwner> PrimaryAccountOwner { get; set; }
+        public DbSet<SecondaryAccountOwner> SecondaryAccountOwner { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             modelBuilder
                .ApplyConfiguration(new AddressConfiguration())
-               .ApplyConfiguration(new ClientConfiguration());
-               // .ApplyConfiguration(new );
+               .ApplyConfiguration(new AccountConfiguration())
+               .ApplyConfiguration(new AccountOwnerConfiguration())
+               .ApplyConfiguration(new ClientConfiguration())
+               .ApplyConfiguration(new AccountOwnerTypeConfiguration())
+               .ApplyConfiguration(new ContactTypeConfiguration());
+               //.ApplyConfiguration(new ClientEmailContactConfiguration())
+               //.ApplyConfiguration(new ClientAddressContactConfiguration())
+               //.ApplyConfiguration(new ClientPhoneContactConfiguration());
         }
     }
 }

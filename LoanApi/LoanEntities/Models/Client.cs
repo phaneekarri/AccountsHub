@@ -15,7 +15,6 @@ namespace LoanEntities.Models
             get => EmailContacts.SingleOrDefault(x => x.ContactType.Description == "Primary");
             private set { }
         }
-
         public ClientAddressContact PrimaryAddress
         {
             get => AddressContacts.SingleOrDefault(x => x.ContactType.Description == "Primary");
@@ -32,20 +31,18 @@ namespace LoanEntities.Models
             get => EmailContacts.Where(x => x.ContactType.Description == "Secondary").ToHashSet();
             private set { }
         }
-
         public ICollection<ClientAddressContact> SecondaryAddresses
         {
             get => AddressContacts.Where(x => x.ContactType.Description == "Secondary").ToHashSet();
             private set { }
         }
-
         public ICollection<ClientPhoneContact> SecondaryPhone
         {
             get => PhoneContacts.Where(x => x.ContactType.Description == "Secondary").ToHashSet();
             private set { }
         }
 
-        public ICollection<Account> Accounts { get; set; }= new HashSet<Account>();
+        public ICollection<AccountOwner> Accounts { get; set; }= new HashSet<AccountOwner>();
         public ICollection<ClientEmailContact> EmailContacts { get; set; } = new HashSet<ClientEmailContact>();
         public ICollection<ClientAddressContact> AddressContacts { get; set; } = new HashSet<ClientAddressContact>();
         public ICollection<ClientPhoneContact> PhoneContacts { get; set; } = new HashSet<ClientPhoneContact>();

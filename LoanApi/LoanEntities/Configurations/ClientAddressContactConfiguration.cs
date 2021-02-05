@@ -1,4 +1,5 @@
-﻿using LoanEntities.Models.Contacts;
+﻿using LoanEntities.Models;
+using LoanEntities.Models.Contacts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,11 +9,7 @@ namespace LoanEntities.Configurations
     {
         public void Configure(EntityTypeBuilder<ClientAddressContact> builder)
         {
-
-            builder.Property(x => x.Value)
-                   .IsRequired();
-            builder.Property(x => x.ContactType)
-                   .IsRequired();
+            ConfigurationHelpers.Configure<ClientAddressContact, Address>(builder);
         }
     }
 }

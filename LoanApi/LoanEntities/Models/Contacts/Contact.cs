@@ -1,4 +1,6 @@
-﻿namespace LoanEntities.Models.Contacts
+﻿using LoanEntities.Models.Types;
+
+namespace LoanEntities.Models.Contacts
 {
     public abstract class Contact<T>
     {

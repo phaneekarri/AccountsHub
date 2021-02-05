@@ -1,6 +1,7 @@
 ﻿using LoanEntities.Configurations;
 using LoanEntities.Models;
 using LoanEntities.Models.Contacts;
+using LoanEntities.Models.Types;
 using Microsoft.EntityFrameworkCore;
 
 namespace LoanEntities
@@ -19,8 +20,8 @@ namespace LoanEntities
         public DbSet<ClientPhoneContact> ClientPhoneContacts { get; set; }
         public DbSet<ClientAddressContact> ClientAddressContacts { get; set; }
 
-        public DbSet<Primary> PrimaryContactType { get; set; }
-        public DbSet<Secondary> SecondaryContactType { get; set; }
+        public DbSet<PrimaryContact> PrimaryContactType { get; set; }
+        public DbSet<SecondaryContact> SecondaryContactType { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

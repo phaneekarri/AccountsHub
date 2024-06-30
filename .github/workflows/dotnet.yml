@@ -35,4 +35,4 @@ jobs:
       working-directory: src/CustomerApi
     - name: Test
       run: dotnet test --no-build --verbosity normal
-      working-directory: test\CustomerEntitiesTest
+      working-directory: test/CustomerEntitiesTest

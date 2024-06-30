@@ -22,7 +22,16 @@ jobs:
         dotnet-version: 8.0.x
     - name: Restore dependencies
       run: dotnet restore
+      working-directory: src/CustomerEntities        
+    - name: Restore dependencies
+      run: dotnet restore
+      working-directory: src/CustomerApi
+
     - name: Build
       run: dotnet build --no-restore
+      working-directory: src/CustomerEntities
+    - name: Build
+      run: dotnet build --no-restore
+      working-directory: src/CustomerApi
     - name: Test
       run: dotnet test --no-build --verbosity normal

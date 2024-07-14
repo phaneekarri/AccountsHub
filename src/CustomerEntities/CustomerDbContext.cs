@@ -1,14 +1,19 @@
-﻿using CustomerEntities.Configurations;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using CustomerEntities.Configurations;
 using CustomerEntities.Models;
 using CustomerEntities.Models.Contacts;
 using CustomerEntities.Models.Types;
+using Infra;
 using Microsoft.EntityFrameworkCore;
 
 namespace CustomerEntities
 {
     public class CustomerDbContext : DbContext
     {
-        public CustomerDbContext(DbContextOptions options) : base(options) { }
+        private readonly string user;
+        public CustomerDbContext(DbContextOptions options, IUserResolver userResolver) : base(options) { user = userResolver.Get(); }
 
         public DbSet<Client> Clients { get; set; }
         public DbSet<Account> Accounts { get; set; }
@@ -43,5 +48,54 @@ namespace CustomerEntities
                //.ApplyConfiguration(new ClientAddressContactConfiguration())
                //.ApplyConfiguration(new ClientPhoneContactConfiguration());
         }
+
+         public override int SaveChanges()
+        {
+            foreach (var entry in ChangeTracker.Entries())
+            {
+                if(entry.State == EntityState.Deleted && entry.Entity is ISoftDelete)
+                {
+                    entry.State = EntityState.Modified;
+                    ((ISoftDelete)entry.Entity).IsDeleted = true;
+                }
+                if( entry.Entity is AuditEntity)
+                {
+                    var audit = (AuditEntity)entry.Entity;
+                    if (entry.State == EntityState.Added){
+
+                        audit.CreatedAt = DateTime.Now;
+                        audit.CreatedBy = user;
+                        audit.UpdatedAt = DateTime.Now;
+                        audit.UpdatedBy = user;
+                    }
+                    if(entry.State == EntityState.Modified) {
+                        audit.UpdatedAt = DateTime.Now;
+                        audit.UpdatedBy = user;
+                    }
+                
+                }
+            }
+        return base.SaveChanges();
+    }
+
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        foreach (var entry in ChangeTracker.Entries())
+        {
+            if( entry.Entity is AuditEntity)
+            {
+                var audit = (AuditEntity)entry.Entity;
+                if (entry.State == EntityState.Added){
+
+                    audit.CreatedAt = DateTime.Now;
+                    audit.UpdatedAt = DateTime.Now;
+                }
+                if(entry.State == EntityState.Modified) {
+                    audit.UpdatedAt = DateTime.Now;
+                }
+            }
+        }
+        return await base.SaveChangesAsync(cancellationToken);
+    }
     }
 }

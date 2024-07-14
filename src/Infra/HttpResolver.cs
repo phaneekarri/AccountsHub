@@ -13,7 +13,7 @@ public abstract class HttpResolver<T>
    {
      Context = context;
    }
-   public abstract T Get();
+   public abstract T Get()
 }
 
 public interface IUserResolver : IHttpResolver<string?>{}

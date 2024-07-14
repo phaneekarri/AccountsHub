@@ -6,12 +6,13 @@ using System.Linq;
 
 namespace CustomerEntities.Models
 {
-    public class Client 
+    public class Client : AuditEntity, ISoftDelete
     {
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime DOB { get; set; }
+        public bool IsDeleted { get ; set ; } = false;
 
         public int Age { get 
             {
@@ -50,7 +51,7 @@ namespace CustomerEntities.Models
         public ICollection<ClientEmailContact> EmailContacts { get; set; } = new HashSet<ClientEmailContact>();
         public ICollection<ClientAddressContact> AddressContacts { get; set; } = new HashSet<ClientAddressContact>();
         public ICollection<ClientPhoneContact> PhoneContacts { get; set; } = new HashSet<ClientPhoneContact>();
-
+     
         public void AddPrimaryEmail(string Email ) 
         {
             var existingPrimary = EmailContacts.Single(c => c.ContactType.Description == "Primary");

@@ -2,7 +2,7 @@
 
 namespace CustomerEntities.Models.Contacts
 {
-    public abstract class Contact<T>
+    public abstract class Contact<T> : AuditEntity
     {
         public ContactType ContactType { get; set; }
         public int Id { get; set; }

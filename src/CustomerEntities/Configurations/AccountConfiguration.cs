@@ -8,6 +8,7 @@ namespace CustomerEntities.Configurations
     {
         public void Configure(EntityTypeBuilder<Account> builder)
         {
+            builder.HasKey(x=>x.Id);
             builder.Property(x => x.Title).HasMaxLength(150);
         }
     }

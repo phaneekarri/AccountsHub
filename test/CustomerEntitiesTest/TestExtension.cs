@@ -22,11 +22,10 @@ namespace CustomerEntitiesTest
         }
 
         public static CustomerDbContext GetTestDbContext()
-        {
-            var connstring = "Server=localhost;Port=3306;Database=CustomerDB;User=root;Password=Password@12345;";
+        {            
             var options = 
                 new DbContextOptionsBuilder<CustomerDbContext>()
-                .UseMySql(connstring, ServerVersion.AutoDetect(connstring))
+                .UseSqlite("Data Source=mydatabase.db")
                 .Options;
                 var userResolverMoq = new Mock<IUserResolver>();
                  userResolverMoq.Setup( r => r.Get()).Returns("test_user");

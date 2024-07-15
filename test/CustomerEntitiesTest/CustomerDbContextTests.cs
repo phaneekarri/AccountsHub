@@ -1,36 +1,24 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using CustomerEntities;
 using CustomerEntities.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CustomerEntitiesTest;
 
 [TestClass]
-public class CustomerDbContextTests
+public class CustomerDbContextTests : DBTests<CustomerDbContext>
 {
-
-
+    protected override CustomerDbContext CreateDBContext() => TestExtension.GetTestDbContext();
     [TestMethod]
     public void CanAddAndRetrieveYourModel()
-    {
-        
-        using (var context = TestExtension.GetTestDbContext())
-        {
-            context.Database.OpenConnection();
-            context.Database.EnsureCreated();
-            context.Accounts.Add(new Account { Id = 1, Title = "TestName" });
+    {       //Arrange
+            context.Accounts.Add(new Account { Title = "TestName" });
             context.SaveChanges();
-        }
-
-        // Act
-        using (var context = TestExtension.GetTestDbContext())
-        {
+            //Act
             var model = context.Accounts.FirstOrDefault(m => m.Title == "TestName");
             // Assert
             Assert.IsNotNull(model);
             Assert.AreEqual("TestName", model.Title);
-        }
     }
+
 }

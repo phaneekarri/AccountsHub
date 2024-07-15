@@ -56,7 +56,7 @@ namespace CustomerEntities
                 if(entry.State == EntityState.Deleted && entry.Entity is ISoftDelete)
                 {
                     entry.State = EntityState.Modified;
-                    ((ISoftDelete)entry.Entity).IsDeleted = true;
+                    ((ISoftDelete)entry.Entity).DeletedAt = DateTimeOffset.Now;
                 }
                 if( entry.Entity is AuditEntity)
                 {

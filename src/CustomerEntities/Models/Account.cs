@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace CustomerEntities.Models
 {
@@ -6,7 +7,7 @@ namespace CustomerEntities.Models
     {
         public int Id { get; set; }
         public string Title { get; set; }
-         public bool IsDeleted { get ; set ; } = false;
+        public DateTimeOffset? DeletedAt {get; set;}
         public ICollection<AccountOwner> AccountOwners { get; set; } = new HashSet<AccountOwner>();
     }
 }

@@ -1,17 +1,12 @@
 using CustomerEntities;
+using Infra;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace LoanApi
 {
@@ -29,13 +24,16 @@ namespace LoanApi
         {
             services.AddDbContext<CustomerDbContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("Default"));
+                var connstring = Configuration.GetConnectionString("Default");
+                options.UseMySql(connstring , ServerVersion.AutoDetect(connstring));
             });
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CustomersApi", Version = "v1" });
             });
+            services.AddHttpContextAccessor();             
+            services.AddHttpResolvers();            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

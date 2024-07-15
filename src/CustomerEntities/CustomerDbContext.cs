@@ -34,6 +34,12 @@ namespace CustomerEntities
         public DbSet<PrimaryAccountOwner> PrimaryAccountOwner { get; set; }
         public DbSet<SecondaryAccountOwner> SecondaryAccountOwner { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.AddInterceptors(new SoftDeleteInterceptor(), new AuditEntityInterceptor(user));
+            base.OnConfiguring(optionsBuilder);
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -48,54 +54,5 @@ namespace CustomerEntities
                //.ApplyConfiguration(new ClientAddressContactConfiguration())
                //.ApplyConfiguration(new ClientPhoneContactConfiguration());
         }
-
-         public override int SaveChanges()
-        {
-            foreach (var entry in ChangeTracker.Entries())
-            {
-                if(entry.State == EntityState.Deleted && entry.Entity is ISoftDelete)
-                {
-                    entry.State = EntityState.Modified;
-                    ((ISoftDelete)entry.Entity).DeletedAt = DateTimeOffset.Now;
-                }
-                if( entry.Entity is AuditEntity)
-                {
-                    var audit = (AuditEntity)entry.Entity;
-                    if (entry.State == EntityState.Added){
-
-                        audit.CreatedAt = DateTime.Now;
-                        audit.CreatedBy = user;
-                        audit.UpdatedAt = DateTime.Now;
-                        audit.UpdatedBy = user;
-                    }
-                    if(entry.State == EntityState.Modified) {
-                        audit.UpdatedAt = DateTime.Now;
-                        audit.UpdatedBy = user;
-                    }
-                
-                }
-            }
-        return base.SaveChanges();
-    }
-
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        foreach (var entry in ChangeTracker.Entries())
-        {
-            if( entry.Entity is AuditEntity)
-            {
-                var audit = (AuditEntity)entry.Entity;
-                if (entry.State == EntityState.Added){
-
-                    audit.CreatedAt = DateTime.Now;
-                    audit.UpdatedAt = DateTime.Now;
-                }
-                if(entry.State == EntityState.Modified) {
-                    audit.UpdatedAt = DateTime.Now;
-                }
-            }
-        }
-        return await base.SaveChangesAsync(cancellationToken);
-    }
     }
 }

@@ -11,6 +11,6 @@ namespace CustomerEntities.Models
         public string City { get; set; }
         public string State { get; set; }
         public string PostalCode { get; set; }
-        public  DateTimeOffset? DeletedAt {get; set;} 
+         public bool IsDeleted { get; set; }
     }
 }

@@ -8,7 +8,8 @@ namespace CustomerEntities.Configurations
     {
         public void Configure(EntityTypeBuilder<ISoftDelete> builder)
         {
-            builder.HasQueryFilter(x=>x.DeletedAt.HasValue);
+            builder.Property(p=>p.IsDeleted).HasDefaultValue(false);
+            builder.HasQueryFilter(x=>!x.IsDeleted);
         }
     }
 }

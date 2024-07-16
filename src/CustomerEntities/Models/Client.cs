@@ -12,7 +12,7 @@ namespace CustomerEntities.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime DOB { get; set; }
-        public  DateTimeOffset? DeletedAt {get; set;}
+         public bool IsDeleted { get; set; }
 
         public int Age { get 
             {

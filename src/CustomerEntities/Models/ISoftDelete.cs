@@ -5,5 +5,5 @@ namespace CustomerEntities;
 
 public interface ISoftDelete
 {
-  public  DateTimeOffset? DeletedAt {get; set;}
+   bool IsDeleted {get; set;}
 }

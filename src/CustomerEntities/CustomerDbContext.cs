@@ -4,6 +4,7 @@ using CustomerEntities.Models;
 using CustomerEntities.Models.Contacts;
 using CustomerEntities.Models.Types;
 using Infra;
+using InfraEntities.Configurations;
 using InfraEntities.Interceptors;
 using Microsoft.EntityFrameworkCore;
 
@@ -43,6 +44,7 @@ namespace CustomerEntities
         {
 
             modelBuilder
+               .ApplyConfiguration(new SoftDeleteConfiguration())
                .ApplyConfiguration(new AddressConfiguration())
                .ApplyConfiguration(new AccountConfiguration())
                .ApplyConfiguration(new AccountOwnerConfiguration())

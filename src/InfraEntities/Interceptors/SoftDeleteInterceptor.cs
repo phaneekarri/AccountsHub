@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using InfraEntities.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace InfraEntities.Interceptors;

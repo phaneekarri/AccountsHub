@@ -1,8 +1,8 @@
-﻿using System;
+﻿using InfraEntities.Interfaces;
 
 namespace InfraEntities;
 
-public class AuditEntity
+public class AuditEntity: IAuditEntity
 {
    public DateTime CreatedAt {get; set;}
    public string? CreatedBy {get; set;}

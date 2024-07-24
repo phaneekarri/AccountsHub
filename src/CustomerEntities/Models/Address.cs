@@ -1,9 +1,10 @@
 ﻿
 using InfraEntities;
+using InfraEntities.Interfaces;
 
 namespace CustomerEntities.Models
 {
-    public class Address : AuditEntity, ISoftDelete
+    public class Address : AuditableSoftDeleteEntity, IAuditEntity, ISoftDelete
     {
         public int Id { get; set; }
         public string AddressLine1 { get; set; }
@@ -11,6 +12,5 @@ namespace CustomerEntities.Models
         public string City { get; set; }
         public string State { get; set; }
         public string PostalCode { get; set; }
-        public bool IsDeleted { get; set; }
     }
 }

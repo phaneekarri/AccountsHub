@@ -3,7 +3,7 @@
     public abstract class ModelType
     {
         public int Id { get; protected set; }
-        public string Description { get; protected set; }
+        public string? Description { get; protected set; }
 
        protected virtual void  SetType<T>() where T : ModelType
         {

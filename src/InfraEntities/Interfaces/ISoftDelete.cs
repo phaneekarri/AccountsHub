@@ -1,5 +1,5 @@
 ﻿
-namespace InfraEntities;
+namespace InfraEntities.Interfaces;
 
 public interface ISoftDelete
 {

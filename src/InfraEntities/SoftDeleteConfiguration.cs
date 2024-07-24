@@ -1,4 +1,5 @@
 
+using InfraEntities.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

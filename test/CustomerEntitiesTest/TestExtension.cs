@@ -1,6 +1,6 @@
 ﻿using CustomerEntities;
-using CustomerEntities.Models.Types;
 using Infra;
+using InfraEntities.ModelType;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

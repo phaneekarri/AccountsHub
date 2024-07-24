@@ -1,4 +1,5 @@
 ﻿using CustomerEntities.Models.Types;
+using InfraEntities;
 
 namespace CustomerEntities.Models.Contacts
 {

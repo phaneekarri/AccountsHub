@@ -1,5 +1,5 @@
 ﻿using CustomerEntities.Models.Types;
-using System;
+using InfraEntities;
 
 
 namespace CustomerEntities.Models
@@ -10,7 +10,7 @@ namespace CustomerEntities.Models
         public Client Client { get; set; }
         public Account Account { get; set; }
         public bool IsActive { get; set; }
-        public  DateTimeOffset? DeletedAt {get; set;}
+         public bool IsDeleted { get; set; }
         public AccountOwnerType  AccountOwnerType {get; set;}
     }
 }

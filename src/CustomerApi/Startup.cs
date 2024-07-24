@@ -31,8 +31,7 @@ namespace LoanApi
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CustomersApi", Version = "v1" });
-            });
-            services.AddHttpContextAccessor();             
+            });          
             services.AddHttpResolvers();            
         }
 

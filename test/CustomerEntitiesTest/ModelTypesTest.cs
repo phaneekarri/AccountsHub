@@ -1,5 +1,4 @@
-using CustomerEntities.Models;
-using CustomerEntities.Models.Contacts;
+using InfraEntities.ModelType;
 using CustomerEntities.Models.Types;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

@@ -1,8 +1,7 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 
-namespace CustomerEntities;
+namespace InfraEntities.Interceptors;
 
 public class SoftDeleteInterceptor : SimplifiedSaveChangesInterceptor
 {
@@ -13,7 +12,7 @@ public class SoftDeleteInterceptor : SimplifiedSaveChangesInterceptor
             if (entry.State == EntityState.Deleted)
             {
                 entry.State = EntityState.Modified;
-                entry.Entity.DeletedAt = DateTimeOffset.Now;
+                entry.Entity.IsDeleted = true;
             }
         }
     }

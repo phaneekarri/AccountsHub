@@ -1,5 +1,5 @@
 ﻿using CustomerEntities.Models.Types;
-using System;
+using InfraEntities;
 
 
 namespace CustomerEntities.Models

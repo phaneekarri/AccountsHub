@@ -1,5 +1,6 @@
 ﻿using CustomerEntities.Models.Contacts;
 using CustomerEntities.Models.Types;
+using InfraEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace CustomerEntities.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime DOB { get; set; }
-         public bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }
 
         public int Age { get 
             {

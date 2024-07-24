@@ -1,7 +1,7 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace CustomerEntities;
+namespace InfraEntities.Interceptors;
+
 public class AuditEntityInterceptor : SimplifiedSaveChangesInterceptor
 { 
     string _user ;

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using InfraEntities.ModelType;
 
 namespace CustomerEntities.Models.Types
 {

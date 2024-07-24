@@ -1,11 +1,10 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿
 using CustomerEntities.Configurations;
 using CustomerEntities.Models;
 using CustomerEntities.Models.Contacts;
 using CustomerEntities.Models.Types;
 using Infra;
+using InfraEntities.Interceptors;
 using Microsoft.EntityFrameworkCore;
 
 namespace CustomerEntities

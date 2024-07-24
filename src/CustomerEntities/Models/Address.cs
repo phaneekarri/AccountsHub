@@ -1,5 +1,5 @@
-﻿using System;
-using System.Runtime.CompilerServices;
+﻿
+using InfraEntities;
 
 namespace CustomerEntities.Models
 {
@@ -11,6 +11,6 @@ namespace CustomerEntities.Models
         public string City { get; set; }
         public string State { get; set; }
         public string PostalCode { get; set; }
-         public bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

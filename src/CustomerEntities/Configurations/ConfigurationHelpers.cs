@@ -1,5 +1,5 @@
 ﻿using CustomerEntities.Models;
-using CustomerEntities.Models.Types;
+using InfraEntities.ModelType;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CustomerEntities.Configurations

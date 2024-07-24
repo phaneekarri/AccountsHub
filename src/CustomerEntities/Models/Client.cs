@@ -1,19 +1,19 @@
 ﻿using CustomerEntities.Models.Contacts;
 using CustomerEntities.Models.Types;
 using InfraEntities;
+using InfraEntities.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace CustomerEntities.Models
 {
-    public class Client : AuditEntity, ISoftDelete
+    public class Client : AuditableSoftDeleteEntity, IAuditEntity, ISoftDelete
     {
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime DOB { get; set; }
-        public bool IsDeleted { get; set; }
 
         public int Age { get 
             {

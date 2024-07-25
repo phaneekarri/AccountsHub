@@ -43,8 +43,7 @@ namespace CustomerEntities
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            modelBuilder
-               .ApplyConfiguration(new SoftDeleteConfiguration())
+            modelBuilder               
                .ApplyConfiguration(new AddressConfiguration())
                .ApplyConfiguration(new AccountConfiguration())
                .ApplyConfiguration(new AccountOwnerConfiguration())

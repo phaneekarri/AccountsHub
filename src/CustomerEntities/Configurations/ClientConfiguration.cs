@@ -19,7 +19,9 @@ namespace CustomerEntities.Configurations
                 .Ignore(x => x.PrimaryPhone)
                 .Ignore(x => x.SecondaryEmail)
                 .Ignore(x => x.SecondaryPhone)
-                .Ignore(x => x.SecondaryAddresses);                       
+                .Ignore(x => x.SecondaryAddresses); 
+                           
+            builder.HasQueryFilter(x=>!x.IsDeleted);                               
         }
     }
 }

@@ -8,9 +8,12 @@ FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG configuration=Release
 
 WORKDIR /src
-COPY ["src/CustomerApi/CustomerApi.csproj", "src/CustomerApi/"]
-COPY ["src/CustomerEntities/CustomerEntities.csproj", "src/CustomerEntities/"]
 COPY ["src/Infra/Infra.csproj", "src/Infra/"]
+COPY ["src/InfraEntities/InfraEntities.csproj", "src/InfraEntities/"]
+COPY ["src/CustomerEntities/CustomerEntities.csproj", "src/CustomerEntities/"]
+COPY ["src/CustomerApi/CustomerApi.csproj", "src/CustomerApi/"]
+
+
 RUN dotnet restore "src/CustomerApi/CustomerApi.csproj"
 COPY . .
 WORKDIR "/src/src/CustomerApi"

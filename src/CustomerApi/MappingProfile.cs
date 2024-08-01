@@ -11,11 +11,44 @@ public class MappingProfile : Profile
     {
         ClientMappings();
 
+        AccountMapping();
+
+        AccountOwnerMapping();
+
+    }
+
+    private void AccountOwnerMapping()
+    {
+        CreateMap<GetAccountOwner, AccountOwner>()
+            .ForMember(dest => dest.AccountOwnerTypeId, opt => opt.MapFrom(src => src.AccountOwnerType))
+            .ForMember(dest => dest.AccountOwnerType, opt => opt.Ignore())
+            .ForMember(dest => dest.Client, opt => opt.Ignore())
+            .ForMember(dest => dest.Account, opt => opt.Ignore())
+            .ReverseMap()
+            .ForMember(dest => dest.AccountOwnerType, opt => opt.MapFrom(src => src.AccountOwnerTypeId));
+
+        CreateMap<CreateAccountOwner, AccountOwner>()
+           .ForMember(dest => dest.AccountOwnerTypeId, opt => opt.MapFrom(src => src.AccountOwnerType))
+           .ForMember(dest => dest.AccountOwnerType, opt => opt.Ignore())
+           .ForMember(dest => dest.Client, opt => opt.Ignore())
+           .ForMember(dest => dest.Account, opt => opt.Ignore());
+    }
+
+    private void AccountMapping()
+    {
+        CreateMap<Account, GetAccount>()
+            .ForMember(dest => dest.Owners, opt => opt.MapFrom(src => src.AccountOwners));
+
+        CreateMap<CreateAccount, Account>()
+           .ForMember(dest => dest.AccountOwners, opt => opt.MapFrom(src => src.Owners));
+
+        CreateMap<UpdateAccount, Account>()
+            .ForMember(dest => dest.AccountOwners, opt => opt.Ignore());
     }
 
     private void ClientMappings()
     {
-        CreateMap<GetClient, Client>();
+        CreateMap<Client, GetClient>();
 
         CreateMap<CreateClient, Client>();
 

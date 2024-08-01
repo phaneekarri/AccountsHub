@@ -14,14 +14,15 @@ namespace CustomerEntities.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateOnly DOB { get; set; }
-
+        /*
         public int Age { get 
             {
                 var age = DateTime.Today.Year - DOB.Year;
                 if (DateTime.Today.Day > DOB.Day) age++;
                 return age;
-            }
+            }            
         }
+        
         public ClientEmailContact PrimaryEmail
         {
             get => EmailContacts.SingleOrDefault(x => x.ContactType.Description == "Primary");
@@ -49,10 +50,11 @@ namespace CustomerEntities.Models
         }
 
         public ICollection<AccountOwner> Accounts { get; set; }= new HashSet<AccountOwner>();
+        /*
         public ICollection<ClientEmailContact> EmailContacts { get; set; } = new HashSet<ClientEmailContact>();
         public ICollection<ClientAddressContact> AddressContacts { get; set; } = new HashSet<ClientAddressContact>();
         public ICollection<ClientPhoneContact> PhoneContacts { get; set; } = new HashSet<ClientPhoneContact>();
-     
+    /*
         public void AddPrimaryEmail(string Email ) 
         {
             var existingPrimary = EmailContacts.Single(c => c.ContactType.Description == "Primary");
@@ -84,6 +86,6 @@ namespace CustomerEntities.Models
         {
             AddressContacts.Add(new ClientAddress<SecondaryContact>() { Client = this, Value = Address });
         }
-
+       */
     }
 }

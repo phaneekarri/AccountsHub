@@ -7,7 +7,7 @@ namespace CustomerEntitiesTest
     [TestClass]
     public class ClientContactsTest
     {
-        [TestMethod]
+       /* [TestMethod]
         public void ClientPhone_Tests()
         {
             new ClientPhone<PrimaryContact>().ContactType.IsPrimary();
@@ -26,5 +26,6 @@ namespace CustomerEntitiesTest
             new ClientAddress<PrimaryContact>().ContactType.IsPrimary();
             new ClientAddress<SecondaryContact>().ContactType.IsSecondary();
         }
+        */
     }
 }

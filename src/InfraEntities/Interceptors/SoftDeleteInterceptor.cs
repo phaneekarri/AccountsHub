@@ -1,20 +1,18 @@
 ﻿using InfraEntities.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 
 namespace InfraEntities.Interceptors;
 
-public class SoftDeleteInterceptor : SimplifiedSaveChangesInterceptor
+public class SoftDeleteInterceptor : SimplifiedSaveChangesInterceptor<ISoftDelete>
 {
-    public override void HandleInterception(DbContext context)
+    public override void HandleInterception(EntityEntry<ISoftDelete> entry) 
     {
-         foreach (var entry in context.ChangeTracker.Entries<ISoftDelete>())
+        if (entry.State == EntityState.Deleted)
         {
-            if (entry.State == EntityState.Deleted)
-            {
                 entry.State = EntityState.Modified;
-                entry.Entity.IsDeleted = true;
-            }
+                entry.Entity.IsDeleted = true;            
         }
     }
 }

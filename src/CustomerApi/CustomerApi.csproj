@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CustomerEntities\CustomerEntities.csproj" />
-    <ProjectReference Include="..\Infra\Infra.csproj" />
   </ItemGroup>
 
 </Project>

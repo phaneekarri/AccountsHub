@@ -13,14 +13,14 @@ namespace CustomerEntities.Configurations
 
             builder.Property(x => x.LastName)
                     .HasMaxLength(100);
-
+        /*
             builder.Ignore(x => x.PrimaryEmail)
                 .Ignore(x => x.PrimaryAddress)
                 .Ignore(x => x.PrimaryPhone)
                 .Ignore(x => x.SecondaryEmail)
                 .Ignore(x => x.SecondaryPhone)
                 .Ignore(x => x.SecondaryAddresses); 
-                           
+         */                  
             builder.HasQueryFilter(x=>!x.IsDeleted);                               
         }
     }

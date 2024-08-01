@@ -10,6 +10,7 @@ namespace CustomerEntities.Configurations
         {
             builder.HasKey(x=>x.Id);
             builder.Property(x => x.Title).HasMaxLength(150);
+            builder.HasQueryFilter(x=>!x.IsDeleted);   
         }
     }
 }

@@ -4,7 +4,6 @@ using CustomerEntities.Models;
 using CustomerEntities.Models.Contacts;
 using CustomerEntities.Models.Types;
 using Infra;
-using InfraEntities.Configurations;
 using InfraEntities.Interceptors;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,21 +17,20 @@ namespace CustomerEntities
         public DbSet<Client> Clients { get; set; }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<AccountOwner> AccountOwners { get; set;}
+        public DbSet<AccountOwnerType> AccountOwnerTypes { get; set; }
 
-        public DbSet<Address> Addresses { get; set; }
+
+        
+        public DbSet<ContactType> ContactTypes { get; set; }
 
         public DbSet<ClientEmailContact> ClientEmailContacts { get; set; }
         public DbSet<ClientPhoneContact> ClientPhoneContacts { get; set; }
         public DbSet<ClientAddressContact> ClientAddressContacts { get; set; }
+        public DbSet<Address> Addresses { get; set; }
 
 
-        public DbSet<ContactType> ContactTypes { get; set; }
-        public DbSet<PrimaryContact> PrimaryContactType { get; set; }
-        public DbSet<SecondaryContact> SecondaryContactType { get; set; }
+  
 
-        public DbSet<AccountOwnerType> AccountOwnerTypes { get; set; }
-        public DbSet<PrimaryAccountOwner> PrimaryAccountOwner { get; set; }
-        public DbSet<SecondaryAccountOwner> SecondaryAccountOwner { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

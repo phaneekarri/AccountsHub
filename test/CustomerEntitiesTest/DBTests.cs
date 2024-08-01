@@ -25,6 +25,7 @@ public abstract class DBTests<TContext> where TContext : DbContext
     {
         //transaction.Rollback();
         //transaction.Dispose();
+        context.Database.EnsureDeleted();
         context.Dispose();
     }
 }

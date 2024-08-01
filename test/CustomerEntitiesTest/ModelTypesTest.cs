@@ -7,7 +7,7 @@ namespace CustomerEntitiesTest
     [TestClass]
     public class ModelTypesTest
     {
-        [TestMethod]
+       /* [TestMethod]
         public void ModelType_Primary_Test()
         {
             new ModelType<Primary>().IsPrimary();
@@ -31,6 +31,6 @@ namespace CustomerEntitiesTest
             new PrimaryAccountOwner().IsPrimary();
             new SecondaryAccountOwner().IsSecondary();
         }
-
+        */
     }
 }

@@ -35,13 +35,14 @@ public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddlewa
             _logger.LogError(ex, $"Error occured in mapping : {ex.Message} ");
             context.Response.ContentType = "text/plain; charset=utf-8 ";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            await context.Response.WriteAsync("Unexpected error");
+            await context.Response.WriteAsync(ex.Message);
         }
-        catch(Exception ex){
+        catch(Exception ex)
+        {
             _logger.LogError(ex, $"Error occured: {ex.Message}");
             context.Response.ContentType = "text/plain; charset=utf-8 ";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            await context.Response.WriteAsync("Unexpected error");
+            await context.Response.WriteAsync(ex.Message);
         }
     }
 

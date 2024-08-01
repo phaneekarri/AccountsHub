@@ -1,9 +1,7 @@
 using System;
 using CustomerApi.Interfaces;
 using CustomerEntities;
-using CustomerEntities.Models;
 using Infra;
-using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -16,30 +14,37 @@ namespace CustomerApi
 {
     public class Startup
     {
-        public Startup(Microsoft.Extensions.Configuration.IConfiguration configuration)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public Microsoft.Extensions.Configuration.IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddScoped<IClientService, ClientService>();   
+            ConfigureBusinessServices(services);
             services.AddDbContext<CustomerDbContext>(options =>
             {
                 var connstring = Configuration.GetConnectionString("Default");
-                options.UseMySql(connstring , ServerVersion.AutoDetect(connstring));
+                options.UseMySql(connstring, ServerVersion.AutoDetect(connstring));
             }, ServiceLifetime.Scoped);
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CustomersApi", Version = "v1" });
-            });          
-            services.AddHttpResolvers(); 
-                    
+            });
+            services.AddHttpResolvers();
+
+        }
+
+        private static void ConfigureBusinessServices(IServiceCollection services)
+        {
+            services.AddScoped<IClientService, ClientService>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IAccountOwnerService, AccountOwnerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

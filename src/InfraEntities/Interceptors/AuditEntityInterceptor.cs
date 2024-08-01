@@ -1,29 +1,28 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using InfraEntities.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace InfraEntities.Interceptors;
 
-public class AuditEntityInterceptor : SimplifiedSaveChangesInterceptor
+public class AuditEntityInterceptor : SimplifiedSaveChangesInterceptor<IAuditEntity>
 { 
     string _user ;
     public AuditEntityInterceptor(string changesBy)
     {
        _user = changesBy;
     }
-    public override void HandleInterception(DbContext context)
+    public override void HandleInterception(EntityEntry<IAuditEntity> entry)
     {
-        foreach (var entry in context.ChangeTracker.Entries<AuditEntity>())
-            {
-                    if (entry.State == EntityState.Added){
+        if (entry.State == EntityState.Added){
 
-                        entry.Entity.CreatedAt = DateTime.Now;
-                        entry.Entity.CreatedBy = _user;
-                        entry.Entity.UpdatedAt = DateTime.Now;
-                        entry.Entity.UpdatedBy = _user;
-                    }
-                    if(entry.State == EntityState.Modified) {
-                        entry.Entity.UpdatedAt = DateTime.Now;
-                        entry.Entity.UpdatedBy = _user;
-                    }                
-           }
+            entry.Entity.CreatedAt = DateTime.Now;
+            entry.Entity.CreatedBy = _user;
+            entry.Entity.UpdatedAt = DateTime.Now;
+            entry.Entity.UpdatedBy = _user;
+        }
+        if(entry.State == EntityState.Modified) {
+            entry.Entity.UpdatedAt = DateTime.Now;
+            entry.Entity.UpdatedBy = _user;
+        }                           
     }
 }

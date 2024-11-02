@@ -3,7 +3,7 @@ using AutoMapper;
 using UserAuthApi.Exceptions;
 using UserAuthEntities;
 
-namespace UserAuthApi;
+namespace UserAuthApi.Services;
 
 public class UserService : BaseService<UserService, AuthDBContext>, IUserService
 {

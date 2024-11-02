@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 using UserAuthApi.Exceptions;
 using UserAuthEntities;
 
-namespace UserAuthApi;
+namespace UserAuthApi.Services;
 
 public class OtpService : BaseService<OtpService, AuthDBContext>, IOtpService
 {

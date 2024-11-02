@@ -28,7 +28,7 @@ namespace CustomerApi
             ConfigureBusinessServices(services);
             services.AddDbContext<CustomerDbContext>(options =>
             {
-                var connstring = Configuration.GetConnectionString("Default");
+                var connstring = Configuration.GetConnectionString("CustomerDB");
                 options.UseMySql(connstring, ServerVersion.AutoDetect(connstring));
             }, ServiceLifetime.Scoped);
             services.AddControllers();

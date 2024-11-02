@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
-namespace UserAuthApi;
+namespace UserAuthApi.Services;
 
 public class BaseService<T, TDBContext>
 where  TDBContext : DbContext

@@ -10,8 +10,8 @@ public class UserLoginValidator : AbstractValidator<UserLoginModel>
      public UserLoginValidator()
     {
         RuleFor(x => x.UserIdentifierType)
-            .IsInEnum().WithMessage("userIdentifierType must be 1 or 2.");
-
+            .IsInEnum().WithMessage("UserIdentifierType must be 1 or 2.");
+      
         When(x => x.UserIdentifierType == UserIdentifierType.Email, () =>
         {
             RuleFor(x => x.UserIdentifier)

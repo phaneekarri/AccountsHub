@@ -1,6 +1,6 @@
 ﻿using UserAuthEntities;
 
-namespace UserAuthApi;
+namespace UserAuthApi.Services;
 
 public interface ITokenService
 {

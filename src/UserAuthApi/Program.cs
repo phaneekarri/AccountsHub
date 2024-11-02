@@ -4,6 +4,7 @@ using FluentValidation.AspNetCore;
 using InfraEntities.Interceptors;
 using Microsoft.EntityFrameworkCore;
 using UserAuthApi;
+using UserAuthApi.Services;
 using UserAuthEntities;
 
 var builder = WebApplication.CreateBuilder(args);

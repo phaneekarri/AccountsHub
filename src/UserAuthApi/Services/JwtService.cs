@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using UserAuthEntities;
 
-namespace UserAuthApi;
+namespace UserAuthApi.Services;
 
 public class JwtService : ITokenService
 {

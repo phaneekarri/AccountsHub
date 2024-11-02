@@ -8,14 +8,15 @@ FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG configuration=Release
 
 WORKDIR /src
-COPY ["src/Infra/Infra.csproj", "src/Infra/"]
-COPY ["src/InfraEntities/InfraEntities.csproj", "src/InfraEntities/"]
-COPY ["src/CustomerEntities/CustomerEntities.csproj", "src/CustomerEntities/"]
 COPY ["src/CustomerApi/CustomerApi.csproj", "src/CustomerApi/"]
-
+#COPY ["src/CustomerEntities/CustomerEntities.csproj", "src/CustomerEntities/"]
 
 RUN dotnet restore "src/CustomerApi/CustomerApi.csproj"
 COPY . .
+
+#RUN dotnet tool install --global dotnet-ef 
+#RUN /root/.dotnet/tools/dotnet-ef database update --project "/src/src/CustomerEntities/CustomerEntities.csproj"
+
 WORKDIR "/src/src/CustomerApi"
 RUN dotnet build "CustomerApi.csproj" -c $configuration -o /app/build
 

@@ -9,7 +9,6 @@ ARG configuration=Release
 
 WORKDIR /src
 COPY ["src/UserAuthApi/UserAuthApi.csproj", "src/UserAuthApi/"]
-COPY ["src/UserAuthEntities/UserAuthEntities.csproj", "src/UserAuthEntities/"]
 RUN dotnet restore "src/UserAuthApi/UserAuthApi.csproj"
 COPY . .
 

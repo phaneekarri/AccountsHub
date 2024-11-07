@@ -1,7 +1,5 @@
-﻿using Castle.Core.Logging;
-using CustomerApi;
+﻿using CustomerApi;
 using CustomerApi.Dto;
-using CustomerEntities.Models;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -9,8 +7,8 @@ namespace CustomerApiTest;
 
 public class AccountOwnerServiceTests : ServiceTests<AccountOwnerService>
 {
-   private AccountService _accountService ;
-   private ClientService _clientService;
+   private AccountService? _accountService ;
+   private ClientService? _clientService;
        
     protected override AccountOwnerService SetSUT()
     { 
@@ -31,9 +29,9 @@ public class AccountOwnerServiceTests : ServiceTests<AccountOwnerService>
         // Arrange 
         var setUp = new CreateAccountOwner { 
             AccountOwnerType = 1, 
-            ClientId = await _clientService.Create(new CreateClient { FirstName = "Test", LastName = "Test", DOB = new DateOnly(2000,9,12)})
+            ClientId = await _clientService!.Create(new CreateClient { FirstName = "Test", LastName = "Test", DOB = new DateOnly(2000,9,12)})
         };
-        var accountId = await _accountService.Create(new CreateAccount { Title = "Test title"});
+        var accountId = await _accountService!.Create(new CreateAccount { Title = "Test title"});
             
         // Act    
         var result =  await SUT.CreateOwnersByAccount(accountId, new List<CreateAccountOwner>{setUp});
@@ -51,7 +49,7 @@ public class AccountOwnerServiceTests : ServiceTests<AccountOwnerService>
     public async Task Verify_CreateAccountOwners_EmptyOwners()
     {
         // Arrange 
-        var accountId = await _accountService.Create(new CreateAccount { Title = "Test title"});
+        var accountId = await _accountService!.Create(new CreateAccount { Title = "Test title"});
             
         // Act    
        Assert.ThrowsAsync<ArgumentNullException>(async() => await SUT.CreateOwnersByAccount(accountId, null));
@@ -63,8 +61,8 @@ public class AccountOwnerServiceTests : ServiceTests<AccountOwnerService>
     public async Task Verify_DeleteAccountOwnersByClient()
     {
         //Arrange
-        var clientId = await _clientService.Create(new CreateClient { FirstName = "Test", LastName = "Test", DOB = new DateOnly(2000,9,12)});
-        var accountId = await _accountService.Create(new CreateAccount { Title = "Test title"});
+        var clientId = await _clientService!.Create(new CreateClient { FirstName = "Test", LastName = "Test", DOB = new DateOnly(2000,9,12)});
+        var accountId = await _accountService!.Create(new CreateAccount { Title = "Test title"});
          var setUp = new CreateAccountOwner { 
             AccountOwnerType = 1, 
             ClientId = clientId
@@ -80,8 +78,8 @@ public class AccountOwnerServiceTests : ServiceTests<AccountOwnerService>
     public async Task Verify_DeleteAccountOwnersByAccountId()
     {
         //Arrange
-        var clientId = await _clientService.Create(new CreateClient { FirstName = "Test", LastName = "Test", DOB = new DateOnly(2000,9,12)});
-        var accountId = await _accountService.Create(new CreateAccount { Title = "Test title"});
+        var clientId = await _clientService!.Create(new CreateClient { FirstName = "Test", LastName = "Test", DOB = new DateOnly(2000,9,12)});
+        var accountId = await _accountService!.Create(new CreateAccount { Title = "Test title"});
          var setUp = new CreateAccountOwner { 
             AccountOwnerType = 1, 
             ClientId = clientId

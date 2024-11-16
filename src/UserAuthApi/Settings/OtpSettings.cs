@@ -1,4 +1,4 @@
-﻿namespace UserAuthApi;
+﻿namespace UserAuthApi.Settings;
 
 public class OtpSettings
 {

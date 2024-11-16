@@ -4,7 +4,7 @@ namespace UserAuthApi.Services;
 
 public interface IUserService
 {
-    Task<User> Register(UserLoginModel userLogin);
-    Task<Guid> LogIn(UserLoginModel userLogin);
-    Task <string> GetToken(Guid userId);
+    Task<User?> Get(Guid id);
+    Task<User?> Get(UserIdentifierType idType, string id);
+    Task<Guid> Create(User user);
 }

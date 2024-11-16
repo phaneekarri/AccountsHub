@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using UserAuthApi.Exceptions;
 using UserAuthEntities;
+using UserAuthApi.Settings;
 
 namespace UserAuthApi.Services;
 
@@ -27,7 +28,7 @@ public class OtpService : BaseService<OtpService, AuthDBContext>, IOtpService
         return model;
     }
 
-    public async Task<User> Verify(OtpVerficationModel userOtp)
+    public async Task<bool> Verify(OtpVerficationModel userOtp)
     {
         Otp? otp = Context.Otps.Include(x=> x.User).Where(x=> userOtp.Otp == x.OtpCode 
                 && x.UserId.ToString() == userOtp.UserId && x.UserIdentifierType == (int)userOtp.UserIdentifierType)
@@ -37,10 +38,10 @@ public class OtpService : BaseService<OtpService, AuthDBContext>, IOtpService
         if(otp?.User == null) throw new OtpException("Invalid Otp");
         otp.MarkUsed();
         await Context.SaveChangesAsync();
-        return otp.User;      
+        return true;      
     }
 
-    private static Otp GenerateOtp(Guid userId, UserIdentifierType userIdentifierType, OtpSettings settings)
+    public static Otp GenerateOtp(Guid userId, UserIdentifierType userIdentifierType, OtpSettings settings)
     => new Otp 
     {
         UserId = userId, UserIdentifierType = (int)userIdentifierType,

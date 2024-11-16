@@ -13,6 +13,8 @@ public class AuthDBContext : DbContext
    public DbSet<User> Users {get; set;}
    public DbSet<Otp> Otps {get; set;}
 
+   public DbSet<AuthToken> AuthTokens {get; set;}
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -32,6 +34,14 @@ public class AuthDBContext : DbContext
 
         modelBuilder.Entity<Otp>()
             .Ignore(e => e.isActive);
+        
+        modelBuilder.Entity<AuthToken>()
+            .Ignore(e => e.isActive)
+            .HasKey(e => e.Id);
+        modelBuilder.Entity<AuthToken>()
+            .Property(e => e.Id)
+            .ValueGeneratedOnAdd();
+             
     }
 
 }

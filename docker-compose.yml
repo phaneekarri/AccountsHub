@@ -1,7 +1,5 @@
 # Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
 
-version: '3.4'
-
 services:
   customerapi:
     image: customerapi
@@ -26,6 +24,8 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
 
   userauthapi:
     image: userauthapi
@@ -43,10 +43,18 @@ services:
       - userdb
 
   userdb:
-    image: mcr.microsoft.com/mssql/server:latest
-    container_name: UserDB-mssql
+    image: mcr.microsoft.com/mssql/server:2022-CU14-ubuntu-20.04
+    container_name: userdb_container
+    user: root
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${AUTH_DB_SA_PASSWORD}
     ports:
       - "1433:1433"
-    environment:
-      ACCEPT_EULA: "Y"
-      SA_PASSWORD: ${AUTH_DB_SA_PASSWORD}
+    volumes:  
+      - sql_data:/var/opt/mssql
+    #command: /bin/bash -c "/opt/mssql/bin/sqlservr & sleep 30 && /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '${AUTH_DB_SA_PASSWORD}' -i /mssql_data/userdb-init.sql"
+   
+volumes:
+  mysql_data:
+  sql_data:

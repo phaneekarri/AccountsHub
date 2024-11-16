@@ -4,5 +4,5 @@ namespace UserAuthApi.Services;
 
 public interface ITokenService
 {
-    string GenerateToken(User user);
+    AuthTokenModel GenerateToken(User user);
 }

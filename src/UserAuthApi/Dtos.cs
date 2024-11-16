@@ -36,21 +36,30 @@ public class OtpModel
     public string? Otp {get; set;} 
     public int ExpiresInSecs {get; set;}
 }
-public record OtpVerficationModel(string UserId, string? Otp, UserIdentifierType UserIdentifierType);
+public record OtpVerficationModel(string UserId, string? Otp, UserIdentifierType UserIdentifierType)
+{
+    public Guid Id => 
+        Guid.TryParse(UserId, out Guid guid)? guid : default;
+
+}
 
 public class OtpVerifictionValidator : AbstractValidator<OtpVerficationModel>
 {
      public OtpVerifictionValidator()
     {
         RuleFor(x => x.UserIdentifierType)
-            .IsInEnum().WithMessage("UserIdentifierType must be 1 or 2.");
+        .IsInEnum().WithMessage("UserIdentifierType must be 1 or 2.");
 
         RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("UserId cannot be empty")
-            .Must((userId) => Guid.TryParse(userId, out _)).WithMessage("UserId must be a valid GUID");
+        .NotEmpty().WithMessage("UserId cannot be empty");
+
+        RuleFor(x => x.Id)            
+        .Must((Id) => Id != default).WithMessage("UserId must be a valid GUID");
 
         RuleFor(x=>Convert.ToInt32(x.Otp)            )
         .GreaterThan(0).WithMessage("Otp is required")
         .InclusiveBetween(10000, 99999).WithMessage("Invalid Otp");
     }
 }
+
+public record AuthTokenModel(string accessToken , int expiresInSecs);

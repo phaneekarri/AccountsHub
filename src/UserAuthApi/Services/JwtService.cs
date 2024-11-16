@@ -1,8 +1,10 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Azure.Core;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using UserAuthApi.Settings;
 using UserAuthEntities;
 
 namespace UserAuthApi.Services;
@@ -21,7 +23,7 @@ public class JwtService : ITokenService
         _audience = settings.Audience;
     }
 
-    public string GenerateToken(User user)
+    public AuthTokenModel GenerateToken(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(_secret);
@@ -38,6 +40,6 @@ public class JwtService : ITokenService
         };
 
         var token = tokenHandler.CreateToken(tokenDescriptor);
-        return tokenHandler.WriteToken(token);
+        return TokenService.CreateAuthToken(tokenHandler.WriteToken(token));
     }
 }

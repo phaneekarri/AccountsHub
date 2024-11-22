@@ -18,12 +18,15 @@ namespace CustomerEntities.Configurations
         public static EntityTypeBuilder<TEntity> Configure<TEntity, TValue>(EntityTypeBuilder<TEntity> builder)
         where TEntity : ClientContact<TValue>
         {
-            if(typeof(TValue) == typeof(string))
-            builder.Property(x => x.Value).HasMaxLength(10);
+            
+            builder
+            .HasOne(c => c.ContactType) // Navigation property
+            .WithMany() // ContactType can have many contacts (one-to-many)
+            .HasForeignKey(c => c.ContactTypeId) // Foreign key property
+            .IsRequired();
+            
+            builder.HasQueryFilter(cac => !cac.Client.IsDeleted);
 
-            builder.Property(x => x.Value).IsRequired();
-            builder.Property(x => x.ContactType).IsRequired();
-            //builder.Property(x => x.Client).IsRequired();
             return builder;
         }
     }

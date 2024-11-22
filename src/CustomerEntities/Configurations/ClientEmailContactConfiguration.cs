@@ -10,7 +10,10 @@ namespace CustomerEntities.Configurations
         public void Configure(EntityTypeBuilder<ClientEmailContact> builder)
         {
             ConfigurationHelpers.Configure<ClientEmailContact, string>(builder);
-            builder.Property(x => x.Value).HasMaxLength(50);
+            builder.Property(x => x.Value)
+                   .HasColumnName("Email")
+                   .HasMaxLength(255)
+                   .IsRequired();
         }
     }
 }

@@ -9,6 +9,10 @@ namespace CustomerEntities.Configurations
         public void Configure(EntityTypeBuilder<ContactType> builder)
         {
             ConfigurationHelpers.Configure(builder);
-        }
-    }
+            builder.HasData(
+                new ContactType{Id = 1, Description = "Primary"},
+                new ContactType{Id = 2, Description = "Secondary"}
+            );
+        }        
+    }    
 }

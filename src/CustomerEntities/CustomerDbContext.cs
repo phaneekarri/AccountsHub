@@ -47,10 +47,10 @@ namespace CustomerEntities
                .ApplyConfiguration(new AccountOwnerConfiguration())
                .ApplyConfiguration(new ClientConfiguration())
                .ApplyConfiguration(new AccountOwnerTypeConfiguration())
-               .ApplyConfiguration(new ContactTypeConfiguration());
-               //.ApplyConfiguration(new ClientEmailContactConfiguration())
-               //.ApplyConfiguration(new ClientAddressContactConfiguration())
-               //.ApplyConfiguration(new ClientPhoneContactConfiguration());
+               .ApplyConfiguration(new ContactTypeConfiguration())
+               .ApplyConfiguration(new ClientEmailContactConfiguration())
+               .ApplyConfiguration(new ClientAddressContactConfiguration())
+               .ApplyConfiguration(new ClientPhoneContactConfiguration());
         }
     }
 }

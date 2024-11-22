@@ -9,6 +9,10 @@ namespace CustomerEntities.Configurations
         public void Configure(EntityTypeBuilder<ClientPhoneContact> builder)
         {
             ConfigurationHelpers.Configure<ClientPhoneContact, string>(builder);
+            builder.Property(x => x.Value)
+                   .HasColumnName("Phone")
+                   .HasMaxLength(20)
+                   .IsRequired();
         }
     }
 }

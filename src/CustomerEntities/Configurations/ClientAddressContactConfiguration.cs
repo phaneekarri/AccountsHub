@@ -10,6 +10,11 @@ namespace CustomerEntities.Configurations
         public void Configure(EntityTypeBuilder<ClientAddressContact> builder)
         {
             ConfigurationHelpers.Configure<ClientAddressContact, Address>(builder);
+            builder
+            .HasOne(x => x.Value) // Value is the navigation property
+            .WithMany() 
+            .HasForeignKey(x => x.AddressId)
+            .IsRequired() ;
         }
     }
 }

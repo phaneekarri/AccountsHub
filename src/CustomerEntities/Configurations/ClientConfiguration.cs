@@ -46,11 +46,12 @@ namespace CustomerEntities.Configurations
 
                    
         
-            builder.Ignore(x => x.PrimaryEmail)
+            builder
+                .Ignore(x => x.PrimaryEmail)
                 .Ignore(x => x.PrimaryAddress)
                 .Ignore(x => x.PrimaryPhone)
-                .Ignore(x => x.SecondaryEmail)
-                .Ignore(x => x.SecondaryPhone)
+                .Ignore(x => x.SecondaryEmails)
+                .Ignore(x => x.SecondaryPhones)
                 .Ignore(x => x.SecondaryAddresses); 
                            
             builder.HasQueryFilter(x=>!x.IsDeleted);                               

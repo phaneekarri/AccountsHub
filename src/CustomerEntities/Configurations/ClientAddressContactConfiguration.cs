@@ -1,5 +1,4 @@
 ﻿using CustomerEntities.Models;
-using CustomerEntities.Models.Contacts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

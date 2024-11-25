@@ -104,12 +104,12 @@ public class MappingProfileTests
        public void Verify_AccountOwner_To_GetAccountOwner()
     {
         //Arrange
-        AccountOwner setUp = new AccountOwner { Id = 1, AccountId = 1, ClientId = 1, AccountOwnerTypeId = 1 };
+        AccountOwner setUp = new AccountOwner { Id = 1, };
         //Act
         var actual = _mapper.Map<GetAccountOwner>(setUp);
         
         //Assert
-        var expected = new GetAccountOwner { Id = 1, ClientId = 1, AccountOwnerType = 1 };
+        var expected = new GetAccountOwner { Id = 1, ClientId = 1,  };
         GetAccountOwnerAssertions(actual, expected );
     }
 
@@ -118,7 +118,6 @@ public class MappingProfileTests
         Assert.That(actual != null, "Value is null");
         Assert.That(actual?.Id == expected?.Id, "Id is not matching");
         Assert.That(actual?.ClientId == expected?.Id, "Client ID is not matching ");        
-        Assert.That(actual.AccountOwnerType ==  expected?.AccountOwnerType, "Account Owner Type is not matching");
     }
 
       [Test]
@@ -127,20 +126,16 @@ public class MappingProfileTests
          CreateAccount setUp = new CreateAccount{
              Title = "Test Title",
              Owners = new List<CreateAccountOwner>{
-                  new CreateAccountOwner { ClientId = 1, AccountOwnerType = 1},
-                  new CreateAccountOwner { ClientId = 2, AccountOwnerType = 1},
-                  new CreateAccountOwner { ClientId = 3, AccountOwnerType = 1}
+                  new CreateAccountOwner { ClientId = 1, },
+                  new CreateAccountOwner { ClientId = 2, },
+                  new CreateAccountOwner { ClientId = 3, }
              }
          };
          //Act
          var actual = _mapper.Map<Account>(setUp);
 
          //Assert
-         var expectedOwners = new List<AccountOwner>{
-             new AccountOwner {ClientId =1, AccountOwnerTypeId =1},
-             new AccountOwner {ClientId =2, AccountOwnerTypeId =1},
-             new AccountOwner {ClientId =3, AccountOwnerTypeId =1},
-          };
+         var expectedOwners = new List<AccountOwner>{         };
          Assert.That(actual != null, "Value is null");
          Assert.That(actual?.Title == "Test Title", "Id not matching");
          Assert.That(actual?.AccountOwners != null, "Owners is null");
@@ -155,13 +150,12 @@ public class MappingProfileTests
         //Arrange
         CreateAccountOwner setUp = new CreateAccountOwner
         {
-            AccountOwnerType = 1,
             ClientId = 1,
         };
         //Act
         AccountOwner actual = _mapper.Map<AccountOwner>(setUp);
         //
-        AccountOwner expected = new AccountOwner { AccountOwnerTypeId = 1, ClientId = 1 };
+        AccountOwner expected = new AccountOwner ();
         CreateAccountOwnerAssertions(actual, expected);
     }
 
@@ -169,7 +163,6 @@ public class MappingProfileTests
     {
         Assert.That(actual != null, "value is null");
         Assert.That(actual?.ClientId == expected?.ClientId, "ClientId is not matching");
-        Assert.That(actual?.AccountOwnerTypeId == expected?.AccountOwnerTypeId, "Account Owner Type is not matching");
     }
 
       [Test]
@@ -179,9 +172,7 @@ public class MappingProfileTests
             Account setUp = new Account {
                Id  = 1, Title = "Test Title", 
                AccountOwners = new List<AccountOwner>{
-                  new AccountOwner {Id = 1, AccountId = 1, ClientId = 1, AccountOwnerTypeId = 1},
-                  new AccountOwner {Id = 2, AccountId = 1, ClientId = 2, AccountOwnerTypeId = 1},
-                  new AccountOwner {Id = 3, AccountId = 1, ClientId = 3, AccountOwnerTypeId = 1}
+
                }
             };
           //Act
@@ -189,9 +180,9 @@ public class MappingProfileTests
             
           //Assert
           var expectedOwners = new List<GetAccountOwner>{            
-                  new GetAccountOwner {Id = 1, ClientId = 1, AccountOwnerType = 1},
-                  new GetAccountOwner {Id = 2, ClientId = 2, AccountOwnerType = 1},
-                  new GetAccountOwner {Id = 3, ClientId = 3, AccountOwnerType = 1}               
+                  new GetAccountOwner {Id = 1, ClientId = 1, },
+                  new GetAccountOwner {Id = 2, ClientId = 2, },
+                  new GetAccountOwner {Id = 3, ClientId = 3, }               
           };
           Assert.That(actual != null, "Value is null");
           Assert.That(actual?.Id == 1, "Id not matching");

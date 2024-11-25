@@ -1,6 +1,10 @@
-﻿namespace InfraEntities;
+﻿using InfraEntities.Interfaces;
 
-public class SoftDelete
+namespace InfraEntities;
+
+public class SoftDelete : ISoftDelete
 {
-  public bool IsDeleted {get; set;}
+   private bool _IsDeleted = false;
+   public bool IsDeleted {get => _IsDeleted; init { _IsDeleted = value;}}
+   public void MarkDeleted() => _IsDeleted = true;
 }

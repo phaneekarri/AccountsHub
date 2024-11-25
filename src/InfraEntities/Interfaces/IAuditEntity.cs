@@ -2,8 +2,8 @@
 
 public interface IAuditEntity
 {
-   DateTime CreatedAt {get; set;}
-   string? CreatedBy {get; set;}
-   DateTime UpdatedAt {get; set;}
-   string? UpdatedBy {get; set;} 
+   DateTime CreatedAt {get;}
+   string? CreatedBy {get;}
+   DateTime UpdatedAt {get;}
+   string? UpdatedBy {get;} 
 }

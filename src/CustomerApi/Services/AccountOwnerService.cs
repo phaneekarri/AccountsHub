@@ -32,11 +32,10 @@ public class AccountOwnerService : IAccountOwnerService
       bool isAnyCreated =false;
         IEnumerable<AccountOwner> existingAccountOwners = _context.AccountOwners.Where(x=> x.AccountId == Id);
         IEnumerable<AccountOwner> ownerstoCreate = _mapper.Map<IEnumerable<AccountOwner>>(Owners);
-        ownerstoCreate = ownerstoCreate.Except(existingAccountOwners, 
-                new AccountOwnersComparer());
+        ownerstoCreate = ownerstoCreate.Except(existingAccountOwners, new AccountOwnersComparer());
       if(ownerstoCreate.Any())
       {
-         await _context.AccountOwners.AddRangeAsync(ownerstoCreate.Select( o => {o.AccountId = Id; return o;}));
+         await _context.AccountOwners.AddRangeAsync(ownerstoCreate.Select( o => {o.Update(new Account{Id = Id}); return o;}));
          isAnyCreated = await _context.SaveChangesAsync() > 0;
       }
       return isAnyCreated;
@@ -52,7 +51,7 @@ public class AccountOwnerService : IAccountOwnerService
 
   public async Task<bool> DeleteAccountOwners(int AccountId)
   {
-    IQueryable<AccountOwner> entities = _context.AccountOwners.Where(x => x.AccountId == AccountId && x.AccountOwnerTypeId != (int)AccountOwnerType.Primary);
+    IQueryable<AccountOwner> entities = _context.AccountOwners.Where(x => x.AccountId == AccountId);
     if(entities.Any()) _context.AccountOwners.RemoveRange(entities);
     else  throw new KeyNotFoundException("No matching item found");    
     return await _context.SaveChangesAsync() >0;
@@ -63,15 +62,16 @@ public class AccountOwnersComparer : IEqualityComparer<AccountOwner>
 {
     public bool Equals(AccountOwner x, AccountOwner y)
     {
-        return x.ClientId == y.ClientId && x.AccountOwnerTypeId == y.AccountOwnerTypeId ;
+        return x.ClientId == y.ClientId && x.AccountId == y.AccountId && x.PriorityOrder == y.PriorityOrder ;
     }
 
     public int GetHashCode([DisallowNull] AccountOwner obj)
     {
          if (obj == null) return 0;
         int hashClientId = obj.ClientId.GetHashCode();
-        int hashAccountTypeId = obj.AccountOwnerTypeId.GetHashCode();
+        int hashAccountTypeId = obj.AccountId.GetHashCode();
+        int hashPriorityOrder = obj.PriorityOrder.GetHashCode();
         
-        return hashClientId ^ hashAccountTypeId;
+        return hashClientId ^ hashAccountTypeId ^ hashPriorityOrder;
     }
 }

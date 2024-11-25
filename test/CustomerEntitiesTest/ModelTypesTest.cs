@@ -1,5 +1,4 @@
 using InfraEntities.ModelType;
-using CustomerEntities.Models.Types;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CustomerEntitiesTest

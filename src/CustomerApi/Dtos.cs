@@ -27,17 +27,14 @@ public class GetAccountOwner
 {
    public int Id {get; set;} 
    public int ClientId {get; set;}
-   public int AccountOwnerType{get; set;}
 }
 public class CreateAccountOwner
 {
-    public int AccountOwnerType {get; set;}
     public  int ClientId {get; set;} 
 }
 public class UpdateAccountOwner
 { 
     public int Id {get; set;}  
-    public int AccountOwnerType {get; set;} 
 };
 
 public class GetAccount {

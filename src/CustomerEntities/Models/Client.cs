@@ -1,6 +1,4 @@
-﻿using CustomerEntities.Models.Contacts;
-using CustomerEntities.Models.Types;
-using InfraEntities;
+﻿using InfraEntities;
 using InfraEntities.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -28,28 +26,30 @@ namespace CustomerEntities.Models
         public ICollection<AccountOwner> Accounts { get; set; }= new HashSet<AccountOwner>();
         
         private List<ClientEmailContact> _emailContacts = new();
-        public IReadOnlyCollection<ClientEmailContact> EmailContacts { get; set; } = new HashSet<ClientEmailContact>();
+        public IReadOnlyCollection<ClientEmailContact> EmailContacts => _emailContacts.AsReadOnly();
         public ClientEmailContact PrimaryEmail => _emailContacts.SingleOrDefault(x => x.IsPrimary);        
-        public ICollection<ClientEmailContact> SecondaryEmail => _emailContacts.Where(x => !x.IsPrimary).ToHashSet();                
+        public IReadOnlyCollection<ClientEmailContact> SecondaryEmails => _emailContacts.Where(x => !x.IsPrimary).ToList().AsReadOnly();                
         public void SetAsPrimaryEmail(string Email ) => _emailContacts.SetAsPrimary(this, Email);
         public void AddSecondaryEmail(string Email) => _emailContacts.AddSecondary(this, Email);        
         public void DeleteEmail(string Email) => _emailContacts.DeleteContact(this, Email);
 
-        public ICollection<ClientPhoneContact> PhoneContacts { get; set; } = new HashSet<ClientPhoneContact>();        
-        public ClientPhoneContact PrimaryPhone => PhoneContacts.SingleOrDefault(x => x.IsPrimary);        
-        public ICollection<ClientPhoneContact> SecondaryPhone => PhoneContacts.Where(x => !x.IsPrimary).ToHashSet();                          
-        public void SetAsPrimaryPhone(string Phone) => PhoneContacts.SetAsPrimary(this, Phone);                
-        public void AddSecondaryPhone(string Phone) => PhoneContacts.AddSecondary(this, Phone);      
-        public void DeletePhone(string Phone) => PhoneContacts.DeleteContact(this, Phone);
+        private List<ClientPhoneContact> _phoneContacts = new();
+        public IReadOnlyCollection<ClientPhoneContact> PhoneContacts { get; set; } = new List<ClientPhoneContact>();        
+        public ClientPhoneContact PrimaryPhone => _phoneContacts.SingleOrDefault(x => x.IsPrimary);        
+        public IReadOnlyCollection<ClientPhoneContact> SecondaryPhones => _phoneContacts.Where(x => !x.IsPrimary).ToList().AsReadOnly();  
+        public void SetAsPrimaryPhone(string Phone) => _phoneContacts.SetAsPrimary(this, Phone);                
+        public void AddSecondaryPhone(string Phone) => _phoneContacts.AddSecondary(this, Phone);      
+        public void DeletePhone(string Phone) => _phoneContacts.DeleteContact(this, Phone);
 
-        public ICollection<ClientAddressContact> AddressContacts { get; set; } = new HashSet<ClientAddressContact>();        
+        private List<ClientAddressContact> _addressContacts = new();
+        public IReadOnlyCollection<ClientAddressContact> AddressContacts { get; set; } = new HashSet<ClientAddressContact>();        
         public ClientAddressContact PrimaryAddress => AddressContacts.SingleOrDefault(x => x.IsPrimary);
         
-        public ICollection<ClientAddressContact> SecondaryAddresses => AddressContacts.Where(x => !x.IsPrimary).ToHashSet();
+        public IReadOnlyCollection<ClientAddressContact> SecondaryAddresses => AddressContacts.Where(x => !x.IsPrimary).ToList().AsReadOnly();
              
-        public void SetAsPrimaryAddress(Address Address) => AddressContacts.SetAsPrimary(this, Address);
-        public void AddSecondaryAddress(Address Address) => AddressContacts.AddSecondary(this, Address);
-        public void DeleteEmail(Address Address) => AddressContacts.DeleteContact(this, Address);
+        public void SetAsPrimaryAddress(Address Address) => _addressContacts.SetAsPrimary(this, Address);
+        public void AddSecondaryAddress(Address Address) => _addressContacts.AddSecondary(this, Address);
+        public void DeleteEmail(Address Address) => _addressContacts.DeleteContact(this, Address);
 
        
     }

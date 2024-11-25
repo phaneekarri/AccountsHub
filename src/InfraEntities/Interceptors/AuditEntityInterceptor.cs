@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace InfraEntities.Interceptors;
 
-public class AuditEntityInterceptor : SimplifiedSaveChangesInterceptor<IAuditEntity>
+public class AuditEntityInterceptor : SimplifiedSaveChangesInterceptor<AuditEntity>
 { 
     string _user ;
     public AuditEntityInterceptor(string changesBy)
     {
        _user = changesBy;
     }
-    public override void HandleInterception(EntityEntry<IAuditEntity> entry)
+    public override void HandleInterception(EntityEntry<AuditEntity> entry)
     {
         if (entry.State == EntityState.Added){
 

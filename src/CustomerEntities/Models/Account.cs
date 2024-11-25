@@ -4,7 +4,9 @@ using InfraEntities.Interfaces;
 
 namespace CustomerEntities.Models
 {
-    public class Account : AuditableSoftDeleteEntity, IAuditEntity, ISoftDelete    
+    public class Account : AuditableSoftDeleteEntity, 
+    IAuditEntity, 
+    ISoftDelete   
     {
         public int Id { get; set; }
         public string Title { get; set; }

@@ -28,7 +28,6 @@ public class AccountOwnerServiceTests : ServiceTests<AccountOwnerService>
     {
         // Arrange 
         var setUp = new CreateAccountOwner { 
-            AccountOwnerType = 1, 
             ClientId = await _clientService!.Create(new CreateClient { FirstName = "Test", LastName = "Test", DOB = new DateOnly(2000,9,12)})
         };
         var accountId = await _accountService!.Create(new CreateAccount { Title = "Test title"});
@@ -40,7 +39,7 @@ public class AccountOwnerServiceTests : ServiceTests<AccountOwnerService>
         
         Assert.That(result == true, "Failed saving");
        
-        var savedAccount = Context.AccountOwners.Where(x => x.AccountId == 1 && x.AccountOwnerTypeId ==1 && x.ClientId == 2).ToList();
+        var savedAccount = Context.AccountOwners.Where(x => x.AccountId == 1 && x.ClientId == 2).ToList();
         Assert.NotNull(savedAccount != null || savedAccount?.Count > 0, "AccountOwner with given details are not saved");
 
     }
@@ -64,7 +63,6 @@ public class AccountOwnerServiceTests : ServiceTests<AccountOwnerService>
         var clientId = await _clientService!.Create(new CreateClient { FirstName = "Test", LastName = "Test", DOB = new DateOnly(2000,9,12)});
         var accountId = await _accountService!.Create(new CreateAccount { Title = "Test title"});
          var setUp = new CreateAccountOwner { 
-            AccountOwnerType = 1, 
             ClientId = clientId
         };
         var Owners = await SUT.CreateOwnersByAccount(accountId, new List<CreateAccountOwner>{setUp});
@@ -81,7 +79,6 @@ public class AccountOwnerServiceTests : ServiceTests<AccountOwnerService>
         var clientId = await _clientService!.Create(new CreateClient { FirstName = "Test", LastName = "Test", DOB = new DateOnly(2000,9,12)});
         var accountId = await _accountService!.Create(new CreateAccount { Title = "Test title"});
          var setUp = new CreateAccountOwner { 
-            AccountOwnerType = 1, 
             ClientId = clientId
         };
         var Owners = await SUT.CreateOwnersByAccount(accountId, new List<CreateAccountOwner>{setUp});

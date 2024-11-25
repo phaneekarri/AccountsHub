@@ -1,5 +1,4 @@
 ﻿using CustomerEntities.Models.Contacts;
-using CustomerEntities.Models.Types;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CustomerEntitiesTest

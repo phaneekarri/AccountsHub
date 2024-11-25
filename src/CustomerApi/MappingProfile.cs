@@ -20,18 +20,13 @@ public class MappingProfile : Profile
     private void AccountOwnerMapping()
     {
         CreateMap<GetAccountOwner, AccountOwner>()
-            .ForMember(dest => dest.AccountOwnerTypeId, opt => opt.MapFrom(src => src.AccountOwnerType))
-            .ForMember(dest => dest.AccountOwnerType, opt => opt.Ignore())
             .ForMember(dest => dest.Client, opt => opt.Ignore())
             .ForMember(dest => dest.Account, opt => opt.Ignore())
-            .ReverseMap()
-            .ForMember(dest => dest.AccountOwnerType, opt => opt.MapFrom(src => src.AccountOwnerTypeId));
+            .ReverseMap();
 
         CreateMap<CreateAccountOwner, AccountOwner>()
-           .ForMember(dest => dest.AccountOwnerTypeId, opt => opt.MapFrom(src => src.AccountOwnerType))
-           .ForMember(dest => dest.AccountOwnerType, opt => opt.Ignore())
            .ForMember(dest => dest.Client, opt => opt.Ignore())
-           .ForMember(dest => dest.Account, opt => opt.Ignore());
+           .ForMember(dest => dest.Account, opt => opt.Ignore());           
     }
 
     private void AccountMapping()

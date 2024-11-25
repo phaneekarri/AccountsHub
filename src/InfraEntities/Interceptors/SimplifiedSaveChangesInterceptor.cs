@@ -35,7 +35,7 @@ where T : class
 {
     public override void HandleInterception(EntityEntry<T> entry)
     {
-       Interception.Invoke(entry);
+       Interception(entry);
     }
 }
 

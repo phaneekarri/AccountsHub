@@ -2,7 +2,11 @@
 
 namespace InfraEntities;
 
-public class AuditableSoftDeleteEntity : AuditEntity, IAuditEntity, ISoftDelete
+public class AuditableSoftDeleteEntity :
+ AuditEntity
+,ISoftDelete
 {
-   public bool IsDeleted {get; set;}
+   private bool _IsDeleted = false;
+   public bool IsDeleted {get => _IsDeleted; init { _IsDeleted = value;}}
+   public void MarkDeleted() => _IsDeleted = true;
 }

@@ -12,7 +12,7 @@ public class SoftDeleteInterceptor : SimplifiedSaveChangesInterceptor<ISoftDelet
         if (entry.State == EntityState.Deleted)
         {
                 entry.State = EntityState.Modified;
-                entry.Entity.IsDeleted = true;            
+                entry.Entity.MarkDeleted();            
         }
     }
 }

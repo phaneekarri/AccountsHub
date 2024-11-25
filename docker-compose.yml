@@ -14,8 +14,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=${CUSTOMER_DB_CONNECTION_STRING}
     depends_on:
-      - mydb
-  mydb:
+      - customersql
+  customersql:
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -40,9 +40,9 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__AuthDatabase=${AUTH_DB_CONNECTION_STRING}
     depends_on:
-      - userdb
+      - usersql
 
-  userdb:
+  usersql:
     image: mcr.microsoft.com/mssql/server:2022-CU14-ubuntu-20.04
     container_name: userdb_container
     user: root
@@ -53,7 +53,6 @@ services:
       - "1433:1433"
     volumes:  
       - sql_data:/var/opt/mssql
-    #command: /bin/bash -c "/opt/mssql/bin/sqlservr & sleep 30 && /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '${AUTH_DB_SA_PASSWORD}' -i /mssql_data/userdb-init.sql"
    
 volumes:
   mysql_data:

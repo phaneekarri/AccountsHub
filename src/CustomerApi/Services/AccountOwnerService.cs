@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using CustomerApi.Constants;
 using CustomerApi.Dto;
 using CustomerEntities;
 using CustomerEntities.Models;
@@ -26,22 +25,24 @@ public class AccountOwnerService : IAccountOwnerService
     }  
 
     
-  public async  Task<bool> CreateOwnersByAccount(int Id, IEnumerable<CreateAccountOwner> Owners )
+  public async  Task<bool> AddOwnersToAccount(int Id, IEnumerable<CreateAccountOwner> Owners )
   { 
       if(Owners == null && Owners.Count()>0) throw new ArgumentNullException("Null value for owners");
       bool isAnyCreated =false;
         IEnumerable<AccountOwner> existingAccountOwners = _context.AccountOwners.Where(x=> x.AccountId == Id);
         IEnumerable<AccountOwner> ownerstoCreate = _mapper.Map<IEnumerable<AccountOwner>>(Owners);
         ownerstoCreate = ownerstoCreate.Except(existingAccountOwners, new AccountOwnersComparer());
+        var accountToCreateOwners = _context.Accounts.SingleOrDefault(a => a.Id == Id);
+        if(accountToCreateOwners == null) throw new KeyNotFoundException("Account doesn't exist");
       if(ownerstoCreate.Any())
       {
-         await _context.AccountOwners.AddRangeAsync(ownerstoCreate.Select( o => {o.Update(new Account{Id = Id}); return o;}));
+         await _context.AccountOwners.AddRangeAsync(ownerstoCreate.Select( o => {o.Update(accountToCreateOwners); return o;}));
          isAnyCreated = await _context.SaveChangesAsync() > 0;
       }
       return isAnyCreated;
   }
 
-  public async Task<bool> DeleteAccountOwnersByClient(int AccountId, int ClientId)
+  public async Task<bool> DeleteOwnerToAccount(int AccountId, int ClientId)
   {
     IQueryable<AccountOwner> entities = _context.AccountOwners.Where(x => x.AccountId == AccountId && x.ClientId == ClientId);
     if(entities.Any()) _context.AccountOwners.RemoveRange(entities);
@@ -49,7 +50,7 @@ public class AccountOwnerService : IAccountOwnerService
     return await _context.SaveChangesAsync() >0;
   }
 
-  public async Task<bool> DeleteAccountOwners(int AccountId)
+  public async Task<bool> DeleteOwnersToAccount(int AccountId)
   {
     IQueryable<AccountOwner> entities = _context.AccountOwners.Where(x => x.AccountId == AccountId);
     if(entities.Any()) _context.AccountOwners.RemoveRange(entities);

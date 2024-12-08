@@ -11,7 +11,7 @@ public class AccountOwnerServiceTests : ServiceTests<AccountOwnerService>
    private ClientService? _clientService;
        
     protected override AccountOwnerService SetSUT()
-    { 
+    {
         _accountService = new AccountService(new Mock<ILogger<AccountService>>().Object, Mapper, Context);
          _clientService = new ClientService(new Mock<ILogger<ClientService>>().Object, Mapper, Context);
 
@@ -33,7 +33,7 @@ public class AccountOwnerServiceTests : ServiceTests<AccountOwnerService>
         var accountId = await _accountService!.Create(new CreateAccount { Title = "Test title"});
             
         // Act    
-        var result =  await SUT.CreateOwnersByAccount(accountId, new List<CreateAccountOwner>{setUp});
+        var result =  await SUT.AddOwnersToAccount(accountId, new List<CreateAccountOwner>{setUp});
 
         //Assert
         
@@ -51,7 +51,7 @@ public class AccountOwnerServiceTests : ServiceTests<AccountOwnerService>
         var accountId = await _accountService!.Create(new CreateAccount { Title = "Test title"});
             
         // Act    
-       Assert.ThrowsAsync<ArgumentNullException>(async() => await SUT.CreateOwnersByAccount(accountId, null));
+       Assert.ThrowsAsync<ArgumentNullException>(async() => await SUT.AddOwnersToAccount(accountId, null));
 
         //Assert
     }
@@ -65,9 +65,9 @@ public class AccountOwnerServiceTests : ServiceTests<AccountOwnerService>
          var setUp = new CreateAccountOwner { 
             ClientId = clientId
         };
-        var Owners = await SUT.CreateOwnersByAccount(accountId, new List<CreateAccountOwner>{setUp});
+        var Owners = await SUT.AddOwnersToAccount(accountId, new List<CreateAccountOwner>{setUp});
         //Act
-         var result = await SUT.DeleteAccountOwnersByClient(accountId, clientId);
+         var result = await SUT.DeleteOwnerToAccount(accountId, clientId);
         //Assert
         Assert.IsTrue(result, "Delete Account owners by client failed");
     }
@@ -81,9 +81,9 @@ public class AccountOwnerServiceTests : ServiceTests<AccountOwnerService>
          var setUp = new CreateAccountOwner { 
             ClientId = clientId
         };
-        var Owners = await SUT.CreateOwnersByAccount(accountId, new List<CreateAccountOwner>{setUp});
+        var Owners = await SUT.AddOwnersToAccount(accountId, new List<CreateAccountOwner>{setUp});
         //Act
-         var result = await SUT.DeleteAccountOwners(accountId);
+         var result = await SUT.DeleteOwnersToAccount(accountId);
         //Assert
         Assert.IsTrue(result, "Delete Account owners by client failed");
         
@@ -95,7 +95,7 @@ public class AccountOwnerServiceTests : ServiceTests<AccountOwnerService>
         //Arrange
 
         //Act
-         Assert.ThrowsAsync<KeyNotFoundException>(async () => await SUT.DeleteAccountOwners(1));
+         Assert.ThrowsAsync<KeyNotFoundException>(async () => await SUT.DeleteOwnersToAccount(1));
         //Assert
     }
 
@@ -105,7 +105,7 @@ public class AccountOwnerServiceTests : ServiceTests<AccountOwnerService>
         //Arrange
 
         //Act
-        Assert.ThrowsAsync<KeyNotFoundException>(async () =>await SUT.DeleteAccountOwnersByClient(1,1));
+        Assert.ThrowsAsync<KeyNotFoundException>(async () =>await SUT.DeleteOwnerToAccount(1,1));
         //Assert
     }
 }

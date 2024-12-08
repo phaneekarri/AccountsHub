@@ -10,6 +10,7 @@ namespace CustomerEntities.Models
     {
         public int Id { get; set; }
         public string Title { get; set; }
+        public string AccountNumber {get; set;}
         public ICollection<AccountOwner> AccountOwners { get; set; } = new HashSet<AccountOwner>();
     }
 }

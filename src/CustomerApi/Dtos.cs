@@ -44,8 +44,7 @@ public class GetAccount {
 }
 public class CreateAccount 
 { 
-    public string Title {get; set;}  
-    public IEnumerable<CreateAccountOwner> Owners {get; set;} 
+    public string Title {get; set;}      
 }
 public class UpdateAccount 
 {

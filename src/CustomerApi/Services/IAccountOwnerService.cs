@@ -7,7 +7,7 @@ namespace CustomerApi;
 
 public interface IAccountOwnerService
 {
-  Task<bool> CreateOwnersByAccount(int Id, IEnumerable<CreateAccountOwner> Owners );
-  Task<bool>DeleteAccountOwnersByClient(int AccountId, int ClientId);
-  Task<bool> DeleteAccountOwners(int AccountId);
+  Task<bool> AddOwnersToAccount(int Id, IEnumerable<CreateAccountOwner> Owners );
+  Task<bool> DeleteOwnerToAccount(int AccountId, int ClientId);
+  Task<bool> DeleteOwnersToAccount(int AccountId);
 }

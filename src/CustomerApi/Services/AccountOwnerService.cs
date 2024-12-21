@@ -29,11 +29,11 @@ public class AccountOwnerService : IAccountOwnerService
   { 
       if(Owners == null && Owners.Count()>0) throw new ArgumentNullException("Null value for owners");
       bool isAnyCreated =false;
-        IEnumerable<AccountOwner> existingAccountOwners = _context.AccountOwners.Where(x=> x.AccountId == Id);
-        IEnumerable<AccountOwner> ownerstoCreate = _mapper.Map<IEnumerable<AccountOwner>>(Owners);
-        ownerstoCreate = ownerstoCreate.Except(existingAccountOwners, new AccountOwnersComparer());
-        var accountToCreateOwners = _context.Accounts.SingleOrDefault(a => a.Id == Id);
-        if(accountToCreateOwners == null) throw new KeyNotFoundException("Account doesn't exist");
+      IEnumerable<AccountOwner> existingAccountOwners = _context.AccountOwners.Where(x=> x.AccountId == Id);
+      IEnumerable<AccountOwner> ownerstoCreate = _mapper.Map<IEnumerable<AccountOwner>>(Owners);
+      ownerstoCreate = ownerstoCreate.Except(existingAccountOwners, new AccountOwnersComparer());
+      var accountToCreateOwners = _context.Accounts.SingleOrDefault(a => a.Id == Id);
+      if(accountToCreateOwners == null) throw new KeyNotFoundException("Account doesn't exist");
       if(ownerstoCreate.Any())
       {
          await _context.AccountOwners.AddRangeAsync(ownerstoCreate.Select( o => {o.Update(accountToCreateOwners); return o;}));

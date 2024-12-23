@@ -23,10 +23,10 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Client, opt => opt.Ignore())
             .ForMember(dest => dest.Account, opt => opt.Ignore())
             .ReverseMap()
-            .ForMember(dest => dest.ClientId, opt => opt.Ignore());
+            .ForMember(dest => dest.ClientId, opt => opt.MapFrom(x=> x.ClientId));
 
         CreateMap<CreateAccountOwner, AccountOwner>()
-           .ForMember(dest => dest.Client, opt => opt.Ignore())
+           .ForMember(dest => dest.Client, opt => opt.MapFrom<AccountOwnerClientMappingResolver>())
            .ForMember(dest => dest.Account, opt => opt.Ignore());           
     }
 

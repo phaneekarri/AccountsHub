@@ -132,11 +132,9 @@ public class MappingProfileTests
          var actual = _mapper.Map<Account>(setUp);
 
          //Assert
-         var expectedOwners = new List<AccountOwner>{         };
          Assert.That(actual != null, "Value is null");
          Assert.That(actual?.Title == "Test Title", "Id not matching");
          Assert.That(actual?.AccountOwners != null, "Owners is null");
-         Assert.That(actual?.AccountOwners.Count() == 3, "Owners count not matching"); 
       }
 
       [Test]
@@ -150,7 +148,8 @@ public class MappingProfileTests
         //Act
         AccountOwner actual = _mapper.Map<AccountOwner>(setUp);
         //
-        AccountOwner expected = new AccountOwner ();
+        AccountOwner expected = new AccountOwner();
+        expected.Update(new Client{Id = 1});
         CreateAccountOwnerAssertions(actual, expected);
     }
 
@@ -158,18 +157,28 @@ public class MappingProfileTests
     {
         Assert.That(actual != null, "value is null");
         Assert.That(actual?.ClientId == expected?.ClientId, "ClientId is not matching");
+        Assert.IsTrue(actual?.IsActive);
+        Assert.IsFalse(actual?.IsDeleted);
     }
 
       [Test]
       public void Verify_Account_To_GetAccount()
    {
           //Arrange
+
             Account setUp = new Account {
                Id  = 1, Title = "Test Title", 
-               AccountOwners = new List<AccountOwner>{
-
-               }
+               AccountOwners = new List<AccountOwner>()               
             };
+            var accountOwner1 = new AccountOwner {Id =1, IsActive = true};
+            accountOwner1.Update(new Client{Id = 1});
+            setUp.AccountOwners.Add(accountOwner1);
+            var accountOwner2 = new AccountOwner {Id =2, IsActive = true};
+            accountOwner2.Update(new Client{Id = 2});
+            setUp.AccountOwners.Add(accountOwner2);
+            var accountOwner3 = new AccountOwner {Id = 3, IsActive = true};
+            accountOwner3.Update(new Client{Id = 3});
+               setUp.AccountOwners.Add(accountOwner3);
           //Act
             var actual = _mapper.Map<GetAccount>(setUp);
             

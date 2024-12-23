@@ -26,8 +26,6 @@ namespace CustomerEntities.Models
             Account = account;
             AccountId = account.Id;            
         }
-
-        
         public void Update(Client client)
         {
             Client = client;

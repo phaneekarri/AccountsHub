@@ -35,7 +35,7 @@ public class AccountOwnerService : IAccountOwnerService
       var accountToCreateOwners = _context.Accounts.SingleOrDefault(a => a.Id == Id);
       if(accountToCreateOwners == null) throw new KeyNotFoundException("Account doesn't exist");
       if(ownerstoCreate.Any())
-      {
+      {        
          await _context.AccountOwners.AddRangeAsync(ownerstoCreate.Select( o => {o.Update(accountToCreateOwners); return o;}));
          isAnyCreated = await _context.SaveChangesAsync() > 0;
       }

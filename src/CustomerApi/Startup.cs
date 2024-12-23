@@ -1,4 +1,5 @@
 using System;
+using CustomerApi.Dto;
 using CustomerApi.Interfaces;
 using CustomerEntities;
 using Infra;
@@ -9,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 namespace CustomerApi
 {
@@ -25,12 +28,21 @@ namespace CustomerApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddTransient<AccountOwnerClientMappingResolver>();
             ConfigureBusinessServices(services);
             services.AddDbContext<CustomerDbContext>(options =>
             {
                 var connstring = Configuration.GetConnectionString("CustomerDB");
                 options.UseMySql(connstring, ServerVersion.AutoDetect(connstring));
             }, ServiceLifetime.Scoped);
+
+            services.AddValidatorsFromAssemblyContaining<CreateClient>();
+            services.AddValidatorsFromAssemblyContaining<UpdateClient>();
+            services.AddValidatorsFromAssemblyContaining<CreateAccountOwner>();
+            services.AddValidatorsFromAssemblyContaining<UpdateAccountOwner>();
+            services.AddValidatorsFromAssemblyContaining<CreateAccount>();
+            services.AddValidatorsFromAssemblyContaining<UpdateAccount>();
+            services.AddFluentValidationAutoValidation();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

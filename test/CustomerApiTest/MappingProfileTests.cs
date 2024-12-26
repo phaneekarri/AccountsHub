@@ -143,7 +143,7 @@ public class MappingProfileTests
         //Arrange
         CreateAccountOwner setUp = new CreateAccountOwner
         {
-            ClientId = 1,
+            Id = 1,
         };
         //Act
         AccountOwner actual = _mapper.Map<AccountOwner>(setUp);

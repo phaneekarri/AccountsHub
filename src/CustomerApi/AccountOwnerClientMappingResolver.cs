@@ -15,6 +15,6 @@ public class AccountOwnerClientMappingResolver : IValueResolver<CreateAccountOwn
 
     public Client Resolve(CreateAccountOwner source, AccountOwner destination, Client destMember, ResolutionContext context)
     {
-        return _dbContext.Clients.FirstOrDefault(x => x.Id == source.ClientId);
+        return _dbContext.Clients.FirstOrDefault(x => x.Id == source.Id);
     }
 }

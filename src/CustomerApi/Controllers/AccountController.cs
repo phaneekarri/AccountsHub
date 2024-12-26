@@ -1,22 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CustomerApi.Dto;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace CustomerApi;
 [ApiController]
 [Route("/api/v1/[Controller]")]
-public class AccountController : ControllerBase
+public class AccountController(ILogger<AccountController> logger, IAccountService service, IServiceProvider serviceProvider ) 
+: ControllerBase
 {
-    private readonly IAccountService _service;
-    private readonly ILogger<AccountController> _logger;
-   public AccountController(ILogger<AccountController> logger, IAccountService service )
-   {
-     _service = service;
-     _logger = logger;
-   }
+    private readonly IAccountService _service = service;
+    private readonly ILogger<AccountController> _logger = logger;
+    private readonly IServiceProvider _serviceProvider = serviceProvider;
 
    [HttpGet]
    public async Task<ActionResult<IEnumerable<GetAccount>>> GetAll()
@@ -60,5 +60,31 @@ public class AccountController : ControllerBase
         return result ?  Accepted("/api/v1/Client")  : StatusCode(500, "An unexpected error occurred."); ; 
     
     }
+    [HttpPost("{Id}/owners")]
+    public async Task<ActionResult> CreateAccountOwners(int Id, [FromBody] IEnumerable<CreateAccountOwner> owners)
+    {
+        _logger.LogInformation("Create Account Owners is running...");
+        return await _service.AddOwners(Id, owners)? Ok() : NoContent();    
+    }
 
+    [HttpPost("{Id}/owner")]
+    public async Task<ActionResult> CreateAccountOwner(int Id, [FromBody] CreateAccountOwner owner)
+    {
+        _logger.LogInformation("CreateAccountOwner is running..");
+        return await _service.AddOwners(Id, new List<CreateAccountOwner>{owner})? Ok() : NoContent();    
+    }
+
+    [HttpDelete("{Id}/owner/{ClientId}")]
+    public async Task<ActionResult> DeleteAccountOwnersByClient(int Id, int ClientId)
+    {
+    _logger.LogInformation("Delete account owner by client Id is running..");
+        return await _service.DeleteOwner(Id, ClientId)? NoContent()  : StatusCode(500, "An unexpected error occurred."); ; 
+    }
+
+    [HttpDelete("{Id}/owners")]
+    public async Task<ActionResult> DeleteAccountOwners(int Id)
+    {
+        _logger.LogInformation("Delete all account Owners");    
+        return await _service.DeleteOwners(Id)? NoContent()  : StatusCode(500, "An unexpected error occurred."); ; 
+    }
 }

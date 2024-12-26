@@ -1,4 +1,5 @@
 using System;
+using CustomerApi.Dto;
 using CustomerApi.Interfaces;
 using CustomerEntities;
 using Infra;
@@ -9,6 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using CustomerApi.Dto.Validators;
 
 namespace CustomerApi
 {
@@ -25,12 +29,15 @@ namespace CustomerApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddTransient<AccountOwnerClientMappingResolver>();
             ConfigureBusinessServices(services);
             services.AddDbContext<CustomerDbContext>(options =>
             {
                 var connstring = Configuration.GetConnectionString("CustomerDB");
                 options.UseMySql(connstring, ServerVersion.AutoDetect(connstring));
             }, ServiceLifetime.Scoped);
+
+            ConfigureFluentValidation(services);
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -44,9 +51,18 @@ namespace CustomerApi
         {
             services.AddScoped<IClientService, ClientService>();
             services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<IAccountOwnerService, AccountOwnerService>();
         }
 
+        private static void ConfigureFluentValidation(IServiceCollection services)
+        {
+            services.AddValidatorsFromAssemblyContaining<CreateClient>();
+            services.AddValidatorsFromAssemblyContaining<UpdateClient>();
+            services.AddValidatorsFromAssemblyContaining<CreateAccountOwner>();
+            services.AddValidatorsFromAssemblyContaining<CreateAccountOwnerListValidator>();
+            services.AddValidatorsFromAssemblyContaining<CreateAccount>();
+            services.AddValidatorsFromAssemblyContaining<UpdateAccount>();
+            services.AddFluentValidationAutoValidation();
+        }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

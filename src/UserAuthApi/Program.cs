@@ -4,6 +4,7 @@ using FluentValidation.AspNetCore;
 using InfraEntities.Interceptors;
 using Microsoft.EntityFrameworkCore;
 using UserAuthApi;
+using UserAuthApi.Dto;
 using UserAuthApi.Process;
 using UserAuthApi.Services;
 using UserAuthApi.Settings;

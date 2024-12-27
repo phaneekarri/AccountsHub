@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using UserAuthApi.Dto;
 using UserAuthEntities;
 
 namespace UserAuthApi.Services;

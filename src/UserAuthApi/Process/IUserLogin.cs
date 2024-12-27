@@ -1,3 +1,5 @@
+using UserAuthApi.Dto;
+
 namespace UserAuthApi.Process;
 
 public interface IUserLogin

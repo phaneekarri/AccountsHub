@@ -1,4 +1,5 @@
 using AutoMapper;
+using UserAuthApi.Dto;
 using UserAuthApi.Exceptions;
 using UserAuthApi.Services;
 using UserAuthEntities;

@@ -1,3 +1,4 @@
+using UserAuthApi.Dto;
 using UserAuthEntities;
 
 namespace UserAuthApi.Process;

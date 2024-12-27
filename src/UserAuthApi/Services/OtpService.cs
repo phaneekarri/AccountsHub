@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using UserAuthApi.Exceptions;
 using UserAuthEntities;
 using UserAuthApi.Settings;
+using UserAuthApi.Dto;
 
 namespace UserAuthApi.Services;
 

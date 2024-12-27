@@ -4,6 +4,7 @@ using System.Text;
 using Azure.Core;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using UserAuthApi.Dto;
 using UserAuthApi.Settings;
 using UserAuthEntities;
 

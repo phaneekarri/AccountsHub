@@ -1,7 +1,6 @@
 ﻿
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using UserAuthApi.Exceptions;
 using UserAuthEntities;
 
 namespace UserAuthApi.Services;

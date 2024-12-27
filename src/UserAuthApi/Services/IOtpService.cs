@@ -1,4 +1,4 @@
-﻿using UserAuthEntities;
+﻿using UserAuthApi.Dto;
 
 namespace UserAuthApi.Services;
 

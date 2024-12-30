@@ -1,9 +1,6 @@
 ﻿namespace InfraEntities.Interfaces;
 
-public interface IAuditEntity
+public interface IAuditEntity : ICreatedEntity, IUpdatedEntity
 {
-   DateTime CreatedAt {get;}
-   string? CreatedBy {get;}
-   DateTime UpdatedAt {get;}
-   string? UpdatedBy {get;} 
+
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using UserAuthApi.Dto;
 using UserAuthEntities;
 
 namespace UserAuthApi.Services;
@@ -11,10 +12,10 @@ public class TokenService(JwtService jwt, ILogger<TokenService> logger, AuthDBCo
     public AuthTokenModel GenerateToken(User user)
     {
         var token =  Jwt.GenerateToken(user);
-        Context.AuthTokens.Add(new AuthToken
+        Context.UserAccessTokens.Add(new UserAccessToken
         {
-           AccessToken = token.accessToken,
-           ExpiresInSecs = token.expiresInSecs,
+           Token = token.accessToken,
+           ExpiryIn = token.expiresInSecs,
            UserId = user.Id,
         });
         return token;

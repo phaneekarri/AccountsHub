@@ -13,6 +13,7 @@ using Microsoft.OpenApi.Models;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using CustomerApi.Dto.Validators;
+using InfraEntities.Interceptors;
 
 namespace CustomerApi
 {
@@ -31,10 +32,13 @@ namespace CustomerApi
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddTransient<AccountOwnerClientMappingResolver>();
             ConfigureBusinessServices(services);
-            services.AddDbContext<CustomerDbContext>(options =>
+            services.AddDbContext<CustomerDbContext>((sp, options) =>
             {
+                var user = sp.GetRequiredService<IUserResolver>().Get();
                 var connstring = Configuration.GetConnectionString("CustomerDB");
                 options.UseMySql(connstring, ServerVersion.AutoDetect(connstring));
+                options.AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>());
+                options.AddInterceptors(new AuditEntityInterceptor(user));
             }, ServiceLifetime.Scoped);
 
             ConfigureFluentValidation(services);

@@ -1,13 +1,18 @@
 
+using System.ComponentModel.DataAnnotations;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using InfraEntities.Interceptors;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using UserAuthApi;
+using UserAuthApi.Dto;
+using UserAuthApi.Dto.Validators;
 using UserAuthApi.Process;
 using UserAuthApi.Services;
 using UserAuthApi.Settings;
 using UserAuthEntities;
+using UserAuthEntities.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +38,7 @@ builder.Services.AddDbContext<AuthDBContext>(options =>
 builder.Services.AddOptions<OtpSettings>()
                 .Bind(builder.Configuration.GetSection("Otp"))                
                 .Validate(options => options.OtpCodeMax > options.OtpCodeMin,
-                           "OtpCodeMax must be greater than OtpCodeMax");
+                           "OtpCodeMax must be greater than OtpCodeMin");
 
 builder.Services.AddOptions<JwtSettings>()
     .Bind(builder.Configuration.GetSection("Jwt"))
@@ -77,20 +82,55 @@ if (app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 
-app.MapPost("/SignIn", async (UserLoginModel userlogin, IValidator<UserLoginModel> validator, IUserLogin process) =>
+app.MapPost("/otp/SignIn", async (UserLoginModel userlogin, IValidator<UserLoginModel> validator, IUserLogin process) 
+=>
 {
   var validation = await validator.ValidateAsync(userlogin);
   if(!validation.IsValid) return Results.BadRequest(validation.Errors.Select(e => e.ErrorMessage));
   var userId = await process.LogIn(userlogin);
   return Results.Ok(userId);  
 })
-.WithName("SignIn")
+.WithName("OTP_SignIn")
 .WithOpenApi();
 
-app.MapPost("/Verify-Otp", 
-async (OtpVerficationModel userlogin, 
-  IValidator<OtpVerficationModel> validator,
-  IUserLogin process) =>
+app.MapPost("/SignUp", async (InternalUserRegisterModel userRegisterModel, IValidator<InternalUserRegisterModel> validator, IRegistration process) 
+=>
+{
+  var validation = await validator.ValidateAsync(userRegisterModel);
+  if(!validation.IsValid) return Results.BadRequest(validation.Errors.Select(e => e.ErrorMessage));
+  var user = await process.Register(userRegisterModel);
+  return Results.Ok(user);  
+})
+.WithName("SignUp")
+.WithOpenApi()
+.Produces<InternalUserDto>();
+
+
+app.MapPost("/SignIn", async (InternalUserLoginModel userLoginModel, IValidator<InternalUserLoginModel> validator, IUserLogin process) 
+=>
+{
+  var validation = await validator.ValidateAsync(userLoginModel);
+  if(!validation.IsValid) return Results.BadRequest(validation.Errors.Select(e => e.ErrorMessage));
+  var userId = await process.LogIn(userLoginModel);
+  return Results.Ok(userId);  
+})
+.WithName("SignIn")
+.WithOpenApi()
+.Produces<InternalUserDto>();
+
+app.MapPost("/SendOtp", async(SendOtpModel otpModel , IValidator<SendOtpModel> validator, IUserLogin process) 
+=>
+{
+  var validation = await validator.ValidateAsync(otpModel);
+  if(!validation.IsValid) return Results.BadRequest(validation.Errors.Select(e => e.ErrorMessage));
+  await process.ResendOtp(otpModel.Id, otpModel.Receiver);
+  return Results.Ok();
+})
+.WithName("SendOtp")
+.WithOpenApi();;
+
+app.MapPost("/Verify-Otp", async (OtpVerficationModel userlogin, IValidator<OtpVerficationModel> validator, IUserLogin process)
+=>
 {
   var validation = await validator.ValidateAsync(userlogin);
   if(!validation.IsValid) Results.BadRequest(validation.Errors.Select(e => e.ErrorMessage));

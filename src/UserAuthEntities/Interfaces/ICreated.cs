@@ -1,4 +1,4 @@
-﻿namespace UserAuthEntities;
+﻿namespace UserAuthEntities.Interfaces;
 
 public interface ICreated
 {

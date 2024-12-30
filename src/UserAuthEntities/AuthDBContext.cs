@@ -1,6 +1,8 @@
 ﻿using Infra;
 using InfraEntities.Interceptors;
 using Microsoft.EntityFrameworkCore;
+using UserAuthEntities.Configurations;
+using UserAuthEntities.InternalUsers;
 
 namespace UserAuthEntities;
 
@@ -10,38 +12,23 @@ public class AuthDBContext : DbContext
    {
 
    }
-   public DbSet<User> Users {get; set;}
-   public DbSet<Otp> Otps {get; set;}
-
-   public DbSet<AuthToken> AuthTokens {get; set;}
+   public DbSet<User> Users  => Set<User>();
+   public DbSet<UserOtp> UserOtps => Set<UserOtp>();
+   public DbSet<UserAccessToken> UserAccessTokens => Set<UserAccessToken>();
+   public DbSet<InternalUser> InternalUsers => Set<InternalUser>();
+   public DbSet<UserPassWord> UserPassWords => Set<UserPassWord>();
+   
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<User>()
-            .HasKey(e => e.Id);
-
-        modelBuilder.Entity<User>()
-            .Property(e => e.Id)
-            .ValueGeneratedOnAdd();
-
-        modelBuilder.Entity<Otp>()
-            .HasKey(e => e.Id);
-
-        modelBuilder.Entity<Otp>()
-            .Property(e => e.Id)
-            .ValueGeneratedOnAdd();
-
-        modelBuilder.Entity<Otp>()
-            .Ignore(e => e.isActive);
-        
-        modelBuilder.Entity<AuthToken>()
-            .Ignore(e => e.isActive)
-            .HasKey(e => e.Id);
-        modelBuilder.Entity<AuthToken>()
-            .Property(e => e.Id)
-            .ValueGeneratedOnAdd();
-             
+        modelBuilder               
+        .ApplyConfiguration(new UserConfiguration())
+        .ApplyConfiguration(new UserPasswordConfiguration())
+        .ApplyConfiguration(new UserOtpConfiguration())
+        .ApplyConfiguration(new UserAccessTokenConfiguration())
+        .ApplyConfiguration(new InternalUserConfiguration());
     }
+            
+
 
 }

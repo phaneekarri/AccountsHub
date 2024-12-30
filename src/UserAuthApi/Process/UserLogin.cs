@@ -1,8 +1,10 @@
+using System.Security.Authentication;
 using AutoMapper;
 using UserAuthApi.Dto;
 using UserAuthApi.Exceptions;
 using UserAuthApi.Services;
 using UserAuthEntities;
+using UserAuthEntities.InternalUsers;
 
 namespace UserAuthApi.Process;
 public class UserLogin : IUserLogin
@@ -26,20 +28,34 @@ public class UserLogin : IUserLogin
         _registrationProcess = registrationProcess;
     }
 
-    public async Task<Guid> LogIn(UserLoginModel userLogin)
+    public async Task<UserDto> LogIn(UserLoginModel userLogin)
     {
-        User? user = null;
-        if(!await TryGetUser(userLogin, user))
-            user = await _registrationProcess.Register(userLogin);
-        await _otpService.Generate(userLogin, user!.Id);
-        return user.Id;
+        if (string.IsNullOrEmpty(userLogin.UserIdentifier)) throw new ValidationException("Identifier is required");        
+        User? user = await _userService.Get(userLogin.UserIdentifierType, userLogin.UserIdentifier);        
+        var userdto = user == null || user.Id == default ? 
+            await _registrationProcess.Register(userLogin) 
+            : _mapper.Map<UserDto>(user);
+        await _otpService.Generate(userdto!.Id, userLogin.UserIdentifierType);
+        return userdto;
     }
 
-    public async Task ResendOtp(UserLoginModel userLogin)
+    public async Task<UserDto> LogIn(InternalUserLoginModel userLogin)
     {
-        User? user = null;
-       if(!await TryGetUser(userLogin, user)) throw new ValidationException("Invalid user details");
-       await _otpService.Generate(userLogin, user!.Id);
+        InternalUser? user = await _userService.Get(userLogin.UserName);
+        if(user?.User == null || user.Id == default || user.UserId == default ) throw new KeyNotFoundException("User not found");
+        if(user.TryAuthenticate(userLogin.PasswordText))
+        {
+            return _mapper.Map<InternalUserDto>(user);
+        }
+        else throw new AuthenticationException("Incorrect Password");
+        
+    }
+
+    public async Task ResendOtp(Guid userId, UserIdentifierType otpReceiver)
+    {
+        User? user = await _userService.Get(userId);
+       if(user == null) throw new KeyNotFoundException("User not found");
+       await _otpService.Generate(user!.Id, otpReceiver);
     }
 
     public async Task<AuthTokenModel> Authenticate(OtpVerficationModel otp)
@@ -52,13 +68,4 @@ public class UserLogin : IUserLogin
        }
        else throw new ValidationException("Invalid Otp Code");
     }
-
-    private async Task<bool> TryGetUser(UserLoginModel userLogin, User? user)
-    {
-        if (string.IsNullOrEmpty(userLogin.UserIdentifier)) throw new ValidationException("Identifier is required");
-         user = await _userService.Get(userLogin.UserIdentifierType, userLogin.UserIdentifier);
-        return user == null || user.Id == default;
-    }
-
-
 }

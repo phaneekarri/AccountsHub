@@ -39,6 +39,7 @@ public class InternalUser :  ICreated, IHasUser
         var hashedPassword = PasswordHelper.HashPassword(userPassword, salt);
         _Passwords.Add(new UserPassWord
         {
+            Id = Guid.NewGuid(),
             Salt = Convert.ToBase64String(salt),
             HashedPassword = hashedPassword,
             User = this

@@ -18,40 +18,45 @@ public class OtpService : BaseService<OtpService, AuthDBContext>, IOtpService
         otpSettings =otpOptions.Value;
     }
 
-    public async Task<OtpModel> Generate(Guid userId, UserIdentifierType otpReceiver)
+    public async Task<UserOtp> Create(Guid userId, UserIdentifierType otpReceiver)
     {
-
-        var Otp = GenerateOtp(userId, otpReceiver, otpSettings);
-        Context.UserOtps.Add(Otp);
+        var Otp = await GetRecentOtp(userId , otpReceiver);
+        if(Otp != null) await Remove(userId, otpReceiver);        
+        Otp = GenerateOtp(userId, otpReceiver, otpSettings);
+        Context.UserOtps.Add(Otp);        
         await Context.SaveChangesAsync();
-        var model = Mapper.Map<OtpModel>(Otp);
-       // await NotifyAsync(model, user.userIdentifier);        
-        return model;
+        return Otp;
     }
 
-    public async Task<bool> Verify(OtpVerficationModel userOtp)
+    public async Task<UserOtp?> GetRecentOtp(Guid userId, UserIdentifierType otpReceiver)
     {
         IList<UserOtp>? unexpired = 
                 await Context.UserOtps
-                .Where(x=> x.UserId.ToString() == userOtp.UserId && x.UserIdentifierType == userOtp.UserIdentifierType)
+                .Where(x=> x.UserId == userId && x.UserIdentifierType == otpReceiver)
                 .ToListAsync();
         
-        var latestOtp = unexpired
+        return unexpired
                 .OrderByDescending(x => x.CreatedAt)
-                .FirstOrDefault(x =>  x.isActive);             
-        if(latestOtp == null || latestOtp.UserId == default || 
-        !string.Equals(userOtp.Otp, latestOtp.Token, StringComparison.OrdinalIgnoreCase )) 
-            throw new OtpException("Otp verification failed");
+                .FirstOrDefault(x =>  x.isActive); 
+    }
+
+    public async Task Remove(Guid userId, UserIdentifierType otpReceiver)
+    {
+            
+        IList<UserOtp>? unexpired = 
+                await Context.UserOtps
+                .Where(x=> x.UserId == userId && x.UserIdentifierType == otpReceiver)
+                .ToListAsync();
         foreach(var otp in unexpired){
             otp.MarkInvalid();
         }
         await Context.SaveChangesAsync();
-        return true;      
     }
 
     public static UserOtp GenerateOtp(Guid userId, UserIdentifierType userIdentifierType, OtpSettings settings)
     => new UserOtp 
     {
+        Id = Guid.NewGuid(),
         UserId = userId, 
         UserIdentifierType = userIdentifierType,
         ExpiryIn = settings.ExpiresInSecs, 

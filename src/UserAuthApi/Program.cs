@@ -47,7 +47,10 @@ builder.Services.AddOptions<JwtSettings>()
     .Validate(options => !string.IsNullOrEmpty(options.Audience), "Jwt Audience is required");
 
 builder.Services.AddScoped<IUserLogin, UserLogin>();
+builder.Services.AddScoped<IInternalUserLogin, InternalUserLogin>();
 builder.Services.AddScoped<IRegistration, Registration>();
+builder.Services.AddScoped<IOtp, Otp>();
+
 
 builder.Services.AddSingleton<ITokenService, JwtService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -106,7 +109,7 @@ app.MapPost("/SignUp", async (InternalUserRegisterModel userRegisterModel, IVali
 .Produces<InternalUserDto>();
 
 
-app.MapPost("/SignIn", async (InternalUserLoginModel userLoginModel, IValidator<InternalUserLoginModel> validator, IUserLogin process) 
+app.MapPost("/SignIn", async (InternalUserLoginModel userLoginModel, IValidator<InternalUserLoginModel> validator, IInternalUserLogin process) 
 =>
 {
   var validation = await validator.ValidateAsync(userLoginModel);
@@ -118,7 +121,7 @@ app.MapPost("/SignIn", async (InternalUserLoginModel userLoginModel, IValidator<
 .WithOpenApi()
 .Produces<InternalUserDto>();
 
-app.MapPost("/EnableMFA", async([FromBody] string userId, IUserLogin process)
+app.MapPost("/EnableMFA", async([FromBody] string userId, IInternalUserLogin process)
 =>
 {
   if(!Guid.TryParse( userId, out Guid userGuid)) return Results.BadRequest("User is invalid");

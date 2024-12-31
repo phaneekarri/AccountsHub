@@ -10,4 +10,6 @@ public interface IUserLogin
 
     Task ResendOtp(Guid userId, UserIdentifierType otpReceiver);
     Task<AuthTokenModel> Authenticate(OtpVerficationModel otp);
+
+    Task EnableMFA(Guid userId);
 }

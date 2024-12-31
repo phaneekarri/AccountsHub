@@ -68,4 +68,10 @@ public class UserLogin : IUserLogin
        }
        else throw new ValidationException("Invalid Otp Code");
     }
+
+    public async Task EnableMFA(Guid userId)
+    {
+        await _userService.EnableMFA(userId);
+    }
+
 }

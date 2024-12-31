@@ -31,7 +31,7 @@ builder.Services.AddDbContext<AuthDBContext>(options =>
     .AddInterceptors( 
             new CommonInterceptor<ICreated>( (entry) => {
              if (entry.State == EntityState.Added)
-            entry.Entity.CreatedAt = DateTime.Now;       
+            entry.Entity.CreatedAt = DateTime.UtcNow;       
             }));
 },  ServiceLifetime.Singleton);
 
@@ -118,6 +118,16 @@ app.MapPost("/SignIn", async (InternalUserLoginModel userLoginModel, IValidator<
 .WithOpenApi()
 .Produces<InternalUserDto>();
 
+app.MapPost("/EnableMFA", async([FromBody] string userId, IUserLogin process)
+=>
+{
+  if(!Guid.TryParse( userId, out Guid userGuid)) return Results.BadRequest("User is invalid");
+  await process.EnableMFA(userGuid);
+  return Results.Ok();
+})
+.WithName("EnableMFA")
+.WithOpenApi();
+
 app.MapPost("/SendOtp", async(SendOtpModel otpModel , IValidator<SendOtpModel> validator, IUserLogin process) 
 =>
 {
@@ -127,7 +137,7 @@ app.MapPost("/SendOtp", async(SendOtpModel otpModel , IValidator<SendOtpModel> v
   return Results.Ok();
 })
 .WithName("SendOtp")
-.WithOpenApi();;
+.WithOpenApi();
 
 app.MapPost("/Verify-Otp", async (OtpVerficationModel userlogin, IValidator<OtpVerficationModel> validator, IUserLogin process)
 =>

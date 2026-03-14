@@ -47,13 +47,13 @@ public class UserLogin : IUserLogin
 
     public async Task<AuthTokenModel> Authenticate(OtpVerficationModel otp)
     {
-       var user = await _userService.Get(otp.Id);      
+      var user = await _userService.Get(otp.Id);      
       if(user == null) throw new ValidationException("Invalid user details");
       if(otp?.Otp == null) throw new ValidationException("Invalid Otp Code");
       if(await _otpProcess.Verify(otp.Id, otp.UserIdentifierType, otp.Otp))
-    {
-         return _tokenService.GenerateToken(user);
-       }
+      {
+        return _tokenService.GenerateToken(user);
+      }
        else throw new ValidationException("Invalid Otp Code");
     }
 

@@ -1,14 +1,27 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Azure.Core;
+using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using UserAuthApi.AuthProviders;
 using UserAuthApi.Dto;
 using UserAuthApi.Settings;
+
 using UserAuthEntities;
 
 namespace UserAuthApi.Services;
+public record TokenResponse : IAuthToken
+{
+    [JsonPropertyName("access_token")]
+    public required string AccessToken { get; init; }
+
+    [JsonPropertyName("id_token")]
+    public required string IdToken { get; init; }
+
+    [JsonPropertyName("expires_in")]
+    public int ExpiresIn { get; init; }
+}
 
 public class JwtService : ITokenService
 {
@@ -30,10 +43,9 @@ public class JwtService : ITokenService
         var key = Encoding.UTF8.GetBytes(_secret);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new[]
-            {
+            Subject = new ClaimsIdentity([            
                 new Claim(ClaimTypes.NameIdentifier.ToString(), user.Id.ToString())           
-            }),
+            ]),
             Expires = DateTime.UtcNow.AddHours(1),
             Issuer = _issuer,
             Audience = _audience,

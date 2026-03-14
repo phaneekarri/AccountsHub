@@ -1,8 +1,8 @@
-﻿using Infra;
-using InfraEntities.Interceptors;
+﻿
 using Microsoft.EntityFrameworkCore;
 using UserAuthEntities.Configurations;
 using UserAuthEntities.InternalUsers;
+using UserAuthEntities.OIDCUsers;
 
 namespace UserAuthEntities;
 
@@ -17,7 +17,7 @@ public class AuthDBContext : DbContext
    public DbSet<UserAccessToken> UserAccessTokens => Set<UserAccessToken>();
    public DbSet<InternalUser> InternalUsers => Set<InternalUser>();
    public DbSet<UserPassWord> UserPassWords => Set<UserPassWord>();
-   
+   public DbSet<OAuthUser> OAuthUsers => Set<OAuthUser>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

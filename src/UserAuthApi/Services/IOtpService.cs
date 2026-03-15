@@ -5,8 +5,8 @@ namespace UserAuthApi.Services;
 
 public interface IOtpService
 {
-    Task<OtpModel> Generate(Guid userId, UserIdentifierType otpReceiver);
-
-    Task<bool> Verify(OtpVerficationModel userOtp);
+    Task<UserOtp> Create(Guid userId, UserIdentifierType otpReceiver);
+    Task<UserOtp?> GetRecentOtp(Guid userId, UserIdentifierType otpReceiver);
+    Task Remove(Guid userId, UserIdentifierType receiver);
 
 }

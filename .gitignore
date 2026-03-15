@@ -340,3 +340,5 @@ ASALocalRun/
 healthchecksdb
 .env
 *.vscode
+sql_data/
+*.sql

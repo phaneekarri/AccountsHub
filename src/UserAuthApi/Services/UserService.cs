@@ -32,14 +32,12 @@ public class UserService : BaseService<UserService, AuthDBContext>, IUserService
             else throw;
         }        
     }
-
+    public async Task<User?> Get(Guid id) => await Context.Users.FindAsync(id);
     public async Task<InternalUser?> Get(string userName)
     {
         try
         {
-            return await Context.InternalUsers
-            .Include(x => x.User)
-            .Include(x=> x.PassWords)                
+            return  await GetQuery()             
             .SingleOrDefaultAsync(x => userName == x.User.UserName);
         }
         catch(Exception ex)
@@ -51,24 +49,47 @@ public class UserService : BaseService<UserService, AuthDBContext>, IUserService
             else throw;
         }
     }
-
-    public async Task<User?> Get(Guid id) => await Context.Users.FindAsync(id);
-
+    public async Task<InternalUser?> EnableMFA(Guid userId)
+    {
+         try
+        {
+            var user =  await GetQuery()                
+            .SingleOrDefaultAsync(x => userId == x.UserId);
+            if(user == null ) throw new KeyNotFoundException("User not found");
+            user.EnableMFA();
+            await Context.SaveChangesAsync();
+            return user;
+        }
+        catch(Exception ex)
+        {
+            if(ex is InvalidOperationException && ex.Message == "Sequence contains more than one element.")
+            {
+                throw new ConflictException("Multiple users with same user information exists.", ex);
+            }
+            else throw;
+        }
+    }
     public async Task<User> Create(User user)
     {
+        if(user.Id == default) user.Id = Guid.NewGuid();
         Context.Users.Add(user);
         await Context.SaveChangesAsync();
         return user;
     }
-
     public async Task<InternalUser> Create(User user, string passWordText)
     {
+        if(user.Id == default) user.Id = Guid.NewGuid();
         var internalUser = new InternalUser {
-                 User = user                  
+                Id = Guid.NewGuid(),
+                User = user                  
             };
         internalUser.ResetPassword(passWordText, 90);
         Context.InternalUsers.Add(internalUser);
         await Context.SaveChangesAsync();
         return internalUser;
     }
+    private IQueryable<InternalUser> GetQuery() => 
+        Context.InternalUsers
+            .Include(x => x.User)
+            .Include(x=> x.PassWords);
 }

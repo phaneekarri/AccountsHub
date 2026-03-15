@@ -3,20 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CustomerApi.Dto;
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace CustomerApi;
 [ApiController]
 [Route("/api/v1/[Controller]")]
-public class AccountController(ILogger<AccountController> logger, IAccountService service, IServiceProvider serviceProvider ) 
+public class AccountController(
+    ILogger<AccountController> logger, 
+    IAccountService service) 
 : ControllerBase
 {
     private readonly IAccountService _service = service;
     private readonly ILogger<AccountController> _logger = logger;
-    private readonly IServiceProvider _serviceProvider = serviceProvider;
 
    [HttpGet]
    public async Task<ActionResult<IEnumerable<GetAccount>>> GetAll()

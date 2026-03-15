@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UserAuthEntities;
 
@@ -11,9 +12,11 @@ using UserAuthEntities;
 namespace UserAuthEntities.Migrations
 {
     [DbContext(typeof(AuthDBContext))]
-    partial class AuthDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241229075153_UpdateNames")]
+    partial class UpdateNames
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,10 +68,8 @@ namespace UserAuthEntities.Migrations
                     b.Property<int>("ExpiryIn")
                         .HasColumnType("int");
 
-                    b.Property<string>("ExpirySpan")
-                        .IsRequired()
-                        .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)");
+                    b.Property<int>("ExpirySpan")
+                        .HasColumnType("int");
 
                     b.Property<string>("HashedPassword")
                         .IsRequired()
@@ -101,16 +102,13 @@ namespace UserAuthEntities.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserName")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -129,10 +127,8 @@ namespace UserAuthEntities.Migrations
                     b.Property<int>("ExpiryIn")
                         .HasColumnType("int");
 
-                    b.Property<string>("ExpirySpan")
-                        .IsRequired()
-                        .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)");
+                    b.Property<int>("ExpirySpan")
+                        .HasColumnType("int");
 
                     b.Property<string>("Token")
                         .IsRequired()
@@ -158,10 +154,8 @@ namespace UserAuthEntities.Migrations
                     b.Property<int>("ExpiryIn")
                         .HasColumnType("int");
 
-                    b.Property<string>("ExpirySpan")
-                        .IsRequired()
-                        .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)");
+                    b.Property<int>("ExpirySpan")
+                        .HasColumnType("int");
 
                     b.Property<string>("Token")
                         .IsRequired()
@@ -170,10 +164,8 @@ namespace UserAuthEntities.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("UserIdentifierType")
-                        .IsRequired()
-                        .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)");
+                    b.Property<int>("UserIdentifierType")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

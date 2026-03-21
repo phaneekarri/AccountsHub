@@ -1,5 +1,4 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using CustomerApi.Dto;
 using CustomerEntities.Models;
 

@@ -29,6 +29,7 @@ namespace CustomerApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddTransient<AccountOwnerClientMappingResolver>();
             ConfigureBusinessServices(services);
@@ -77,8 +78,7 @@ namespace CustomerApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CustomerApi v1"));
             }
-            app.UseMiddleware<ExceptionMiddleware>();
-
+            app.UseExceptionHandler();
             app.UseRouting();
 
             app.UseAuthorization();

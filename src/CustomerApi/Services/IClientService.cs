@@ -12,7 +12,7 @@ public interface IClientService
    Task<GetClient>GetBy(int Id);
 
    Task<int> Create(CreateClient client);
-   Task<bool> Patch(int Id, UpdateClient dto);
+   Task<bool> Patch(int Id, PatchClient dto);
    Task<bool> Update(int Id, UpdateClient dto);
    Task<bool> Delete(int id);
 }

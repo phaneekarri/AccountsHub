@@ -24,6 +24,14 @@ public class  UpdateClient {
 
 }
 
+#nullable enable
+public class PatchClient {
+    public string? FirstName {get; set;}
+    public string? LastName {get; set;} 
+    public DateOnly? DOB {get; set;}  
+
+}
+#nullable restore
 public class GetAccountOwner
 {
    public int Id {get; set;} 

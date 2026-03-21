@@ -29,7 +29,7 @@ namespace CustomerEntitiesTest
                 .Options;
                 var userResolverMoq = new Mock<IUserResolver>();
                  userResolverMoq.Setup( r => r.Get()).Returns("test_user");
-            return new CustomerDbContext(options, userResolverMoq.Object);
+            return new CustomerDbContext();
         }
 
         public static ModelBuilder GetTestModelBuilder()

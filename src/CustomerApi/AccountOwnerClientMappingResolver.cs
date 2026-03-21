@@ -4,7 +4,8 @@ using CustomerApi.Dto;
 using CustomerEntities;
 using CustomerEntities.Models;
 
-public class AccountOwnerClientMappingResolver : IValueResolver<CreateAccountOwner, AccountOwner, Client>
+public class AccountOwnerClientMappingResolver 
+: IValueResolver<CreateAccountOwner, AccountOwner, Client>
 {
     private readonly CustomerDbContext _dbContext;
 

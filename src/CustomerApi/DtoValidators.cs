@@ -38,6 +38,21 @@ public class UpdateClientValidator : AbstractValidator<UpdateClient>{
     }
 }
 
+public class PatchClientValidator : AbstractValidator<PatchClient>{
+    public PatchClientValidator()
+    {
+        RuleFor(x => x.FirstName)
+            .NotEmpty().When(x => x.FirstName != null).WithMessage("First Name is required.");
+        RuleFor(x => x.LastName)
+            .NotEmpty().When(x => x.LastName != null).WithMessage("Last Name is required.");
+        RuleFor(x=> x.DOB)
+             .GreaterThan(new DateOnly(1900,1,1)).When(x => x.DOB != null)
+             .WithMessage("DOB cannot be less than 01/01/1900");
+        RuleFor(x=> x.DOB)
+             .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.UtcNow)).When(x => x.DOB != null)
+             .WithMessage("Future data is not valid for DOB");                        
+    }
+}
 public class CreateAccountOwnerValidator : AbstractValidator<CreateAccountOwner>
 {
     private readonly CustomerDbContext _db;
@@ -90,6 +105,7 @@ public class UpdateAccountValidator : AbstractValidator<UpdateAccount>
     public UpdateAccountValidator()
     {
         RuleFor(x => x.Title)
-            .NotEmpty().WithMessage("Title is required.");                      
+            .NotEmpty().WithMessage("Title is required.");    
+                  
     }
 }

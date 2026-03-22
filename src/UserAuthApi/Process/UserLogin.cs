@@ -1,4 +1,3 @@
-using AutoMapper;
 using UserAuthApi.Dto;
 using UserAuthApi.Exceptions;
 using UserAuthApi.Services;
@@ -8,19 +7,17 @@ namespace UserAuthApi.Process;
 public class UserLogin : IUserLogin
 {
     private readonly ILogger<UserLogin> _logger;
-    private readonly IMapper _mapper;
     private readonly IUserService _userService;
     private readonly ITokenService _tokenService;
     private readonly IOtp _otpProcess;
 
     private readonly IRegistration _registrationProcess;
 
-    public UserLogin(ILogger<UserLogin> logger, IMapper mapper, 
+    public UserLogin(ILogger<UserLogin> logger, 
     IRegistration registrationProcess, ITokenService tokenService,
     IUserService userService, IOtp otpProcess)
     {
         _logger = logger;
-        _mapper = mapper;
         _userService = userService;
         _otpProcess = otpProcess;
         _tokenService = tokenService;
@@ -33,7 +30,7 @@ public class UserLogin : IUserLogin
         User? user = await _userService.Get(userLogin.UserIdentifierType, userLogin.UserIdentifier);        
         var userdto = user == null || user.Id == default ? 
             await _registrationProcess.Register(userLogin) 
-            : _mapper.Map<UserDto>(user);
+            : user.ToUserDto();
         await _otpProcess.Generate(userdto!.Id, userLogin.UserIdentifierType);
         return userdto;
     }

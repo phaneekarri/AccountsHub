@@ -1,5 +1,4 @@
 ﻿
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using UserAuthApi.Exceptions;
 using UserAuthEntities;
@@ -9,8 +8,8 @@ namespace UserAuthApi.Services;
 
 public class UserService : BaseService<UserService, AuthDBContext>, IUserService
 {
-    public UserService(ILogger<UserService> logger, IMapper mapper, AuthDBContext context) 
-    : base(logger, mapper, context)
+    public UserService(ILogger<UserService> logger, AuthDBContext context) 
+    : base(logger, context)
     {        
     }
 

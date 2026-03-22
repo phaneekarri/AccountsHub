@@ -6,7 +6,7 @@ namespace CustomerApiTest;
 public class ClientServiceTests : ServiceTests<ClientService>
 {
 
-    protected override ClientService SetSUT() => new ClientService(LoggerMock.Object, Mapper, Context);
+    protected override ClientService SetSUT() => new ClientService(Context);
     
     [Test]
     public async Task Verify_CreateClient()
@@ -45,7 +45,7 @@ public class ClientServiceTests : ServiceTests<ClientService>
        CreateClient client1 = new CreateClient { FirstName = "Kevin", LastName = "Smith", DOB = new DateOnly(1998, 08, 12)};
         var createdClientId = await SUT.Create(client1);
 
-        UpdateClient setUp = new UpdateClient { FirstName = "Jim"};
+        PatchClient setUp = new PatchClient { FirstName = "Jim"};
        
         //Act
         var result  = await SUT.Patch(createdClientId, setUp);

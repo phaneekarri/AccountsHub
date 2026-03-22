@@ -1,14 +1,12 @@
 using System.Security.Authentication;
-using AutoMapper;
 using UserAuthApi.Dto;
 using UserAuthApi.Services;
 using UserAuthEntities.InternalUsers;
 
 namespace UserAuthApi.Process;
-public class InternalUserLogin(ILogger<InternalUserLogin> logger, IUserService service, IMapper mapper) : IInternalUserLogin
+public class InternalUserLogin(ILogger<InternalUserLogin> logger, IUserService service) : IInternalUserLogin
 {
     private readonly ILogger<InternalUserLogin> _logger = logger;
-    private readonly IMapper _mapper = mapper;
     private readonly IUserService _userService = service;
     
     public async Task EnableMFA(Guid userId)
@@ -21,7 +19,7 @@ public class InternalUserLogin(ILogger<InternalUserLogin> logger, IUserService s
         if(user?.User == null || user.Id == default || user.UserId == default ) throw new KeyNotFoundException("User not found");
         if(user.TryAuthenticate(userLogin.PasswordText))
         {
-            return _mapper.Map<InternalUserDto>(user);
+            return user.ToInternalUserDto();
         }
         else throw new AuthenticationException("Incorrect Password");
         

@@ -30,8 +30,6 @@ namespace CustomerApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddExceptionHandler<GlobalExceptionHandler>();
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddTransient<AccountOwnerClientMappingResolver>();
             ConfigureBusinessServices(services);
             services.AddDbContext<CustomerDbContext>((sp, options) =>
             {

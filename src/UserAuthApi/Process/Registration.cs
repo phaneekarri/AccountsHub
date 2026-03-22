@@ -1,4 +1,3 @@
-using AutoMapper;
 using UserAuthApi.Dto;
 using UserAuthApi.Exceptions;
 using UserAuthApi.Services;
@@ -10,15 +9,13 @@ namespace UserAuthApi.Process;
 public class Registration : IRegistration
 {
     private readonly ILogger<Registration> _logger;
-    private readonly IMapper _mapper;
     private readonly IUserService _userService;
 
-    public Registration(ILogger<Registration> logger , IMapper mapper, 
+    public Registration(ILogger<Registration> logger, 
      IUserService user
     )
     {
         _logger = logger;
-        _mapper = mapper;
         _userService = user;
         
     }
@@ -26,9 +23,9 @@ public class Registration : IRegistration
     {
         if(await _userService.Get(userLogin.UserIdentifierType, userLogin.UserIdentifier!) != null)
          throw new ConflictException("User already exists");
-        var user = _mapper.Map<User>(userLogin);      
+        var user = userLogin.ToUser();      
         await _userService.Create(user);        
-        return _mapper.Map<UserDto>(user);
+        return user.ToUserDto();
     }
 
     public async Task<UserDto> Register(InternalUserRegisterModel userRegisterModel)
@@ -37,9 +34,9 @@ public class Registration : IRegistration
          ||   await _userService.Get(UserIdentifierType.Email, userRegisterModel.Email) != null
          || (!string.IsNullOrEmpty(userRegisterModel.Phone) && await _userService.Get(UserIdentifierType.Phone, userRegisterModel.Phone) != null))
          throw new ConflictException("User already exists");
-        var userModel = _mapper.Map<User>(userRegisterModel);
+        var userModel = userRegisterModel.ToUser();
         var user = await _userService.Create(userModel);
         var internalUser = await _userService.Create(user, userRegisterModel.PasswordText);
-        return _mapper.Map<InternalUserDto>(internalUser);
+        return internalUser.ToInternalUserDto();
     }
 }

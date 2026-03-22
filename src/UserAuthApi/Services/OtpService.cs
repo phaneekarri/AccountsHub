@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using UserAuthApi.Exceptions;
 using UserAuthEntities;
 using UserAuthApi.Settings;
@@ -11,9 +10,9 @@ namespace UserAuthApi.Services;
 public class OtpService : BaseService<OtpService, AuthDBContext>, IOtpService
 {
     private readonly OtpSettings otpSettings;
-    public OtpService(ILogger<OtpService> logger, IMapper mapper, AuthDBContext context, 
+    public OtpService(ILogger<OtpService> logger, AuthDBContext context, 
      IOptions<OtpSettings> otpOptions)
-       :base(logger, mapper, context)
+       :base(logger, context)
     {
         otpSettings =otpOptions.Value;
     }

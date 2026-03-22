@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace UserAuthApi.Services;
 
@@ -8,12 +7,10 @@ where  TDBContext : DbContext
 {
     protected readonly ILogger<T> Logger;
     protected readonly TDBContext Context;
-    protected readonly IMapper Mapper;
-    public BaseService(ILogger<T> logger, IMapper mapper,
+    public BaseService(ILogger<T> logger,
      TDBContext context)
     {
         Logger = logger;
         Context = context;
-        Mapper = mapper;
     }
 }

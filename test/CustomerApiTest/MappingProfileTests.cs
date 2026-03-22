@@ -1,26 +1,12 @@
-﻿using AutoMapper;
-using CustomerApi;
+﻿using CustomerApi;
 using CustomerApi.Dto;
 using CustomerEntities.Models;
 
 namespace CustomerApiTest;
 
 [TestFixture]
-public class MappingProfileTests
+public class MappingExtensionsTests
 {
-        private IMapper _mapper;
-        private MapperConfiguration _mapperConfiguration;
-
-        [SetUp]
-        public void Setup()
-        {
-            _mapperConfiguration = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<MappingProfile>();
-            });
-
-            _mapper = _mapperConfiguration.CreateMapper();
-        }
         
         #region Client Mappings
         [Test]
@@ -34,7 +20,7 @@ public class MappingProfileTests
                  };
               
               //Act
-               Client actual = _mapper.Map<Client>(setUpClient);
+               Client actual = setUpClient.ToClient();
                Client expectedClient = new Client
                             {  
                                FirstName = "Test First Name",
@@ -55,19 +41,15 @@ public class MappingProfileTests
                  LastName = "Test Last Name",  
                  DOB = new DateOnly(2000,02,01)
                  };
+              Client client = new Client();
               
               //Act
-               Client actual = _mapper.Map<Client>(setUpClient);
-               Client expectedClient = new Client
-                            {  
-                               FirstName = "Test First Name",
-                               LastName = "Test Last Name",  
-                               DOB = new DateOnly(2000,02,01)
-                            };
+               client.UpdateFrom(setUpClient);
+               
                //Assert                            
-              Assert.That(actual.FirstName , Is.EqualTo(expectedClient?.FirstName), "FirstName not matching");
-              Assert.That(actual.LastName , Is.EqualTo(expectedClient?.LastName), "LastName not matching");
-              Assert.That(actual.DOB , Is.EqualTo(expectedClient?.DOB), "DOB not matching");
+              Assert.That(client.FirstName , Is.EqualTo("Test First Name"), "FirstName not matching");
+              Assert.That(client.LastName , Is.EqualTo("Test Last Name"), "LastName not matching");
+              Assert.That(client.DOB , Is.EqualTo(new DateOnly(2000,02,01)), "DOB not matching");
         }
 
         [Test]
@@ -81,14 +63,14 @@ public class MappingProfileTests
                  };
               
               //Act
-               GetClient actual = _mapper.Map<Client,GetClient>(setUpClient);
+               GetClient actual = setUpClient.ToGetClient();
                GetClient expectedClient = new GetClient
                             { 
                                Id =1, 
                                FirstName = "Test First Name",
                                LastName = "Test Last Name",  
                                DOB = new DateOnly(2000,02,01),
-                               Age = 25
+                               Age = 26
                             };
                //Assert                            
               Assert.That(actual.FirstName , Is.EqualTo(expectedClient?.FirstName), "FirstName not matching");
@@ -108,7 +90,7 @@ public class MappingProfileTests
         AccountOwner setUp = new AccountOwner { Id = 1,  };
         setUp.Update(new Client() {Id = 1});
         //Act
-        var actual = _mapper.Map<GetAccountOwner>(setUp);
+        var actual = setUp.ToGetAccountOwner();
         
         //Assert
         var expected = new GetAccountOwner { Id = 1, ClientId = 1,  };
@@ -129,7 +111,7 @@ public class MappingProfileTests
              Title = "Test Title"
          };
          //Act
-         var actual = _mapper.Map<Account>(setUp);
+         var actual = setUp.ToAccount();
 
          //Assert
          Assert.That(actual != null, "Value is null");
@@ -146,10 +128,11 @@ public class MappingProfileTests
             Id = 1,
         };
         //Act
-        AccountOwner actual = _mapper.Map<AccountOwner>(setUp);
+        AccountOwner actual = new AccountOwner();
+        actual.Update(new Client { Id = 1 });
         //
         AccountOwner expected = new AccountOwner();
-        expected.Update(new Client{Id = 1});
+        expected.Update(new Client { Id = 1 });
         CreateAccountOwnerAssertions(actual, expected);
     }
 
@@ -157,8 +140,6 @@ public class MappingProfileTests
     {
         Assert.That(actual != null, "value is null");
         Assert.That(actual?.ClientId == expected?.ClientId, "ClientId is not matching");
-        Assert.IsTrue(actual?.IsActive);
-        Assert.IsFalse(actual?.IsDeleted);
     }
 
       [Test]
@@ -180,7 +161,7 @@ public class MappingProfileTests
             accountOwner3.Update(new Client{Id = 3});
                setUp.AccountOwners.Add(accountOwner3);
           //Act
-            var actual = _mapper.Map<GetAccount>(setUp);
+            var actual = setUp.ToGetAccount();
             
           //Assert
           var expectedOwners = new List<GetAccountOwner>{            

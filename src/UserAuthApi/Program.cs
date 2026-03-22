@@ -19,7 +19,6 @@ builder.Services.AddValidatorsFromAssemblyContaining<UserLoginModel>();
 builder.Services.AddValidatorsFromAssemblyContaining<OtpVerficationModel>();
 builder.Services.AddFluentValidationAutoValidation();
 
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddDbContext<AuthDBContext>(options =>
 {
     var connstring = builder.Configuration.GetConnectionString("AuthDatabase");

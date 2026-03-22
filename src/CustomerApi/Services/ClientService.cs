@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using CustomerApi.Dto;
 using CustomerApi.Interfaces;
 using CustomerEntities;
@@ -12,20 +11,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CustomerApi;
 
-public class ClientService(IMapper mapper, CustomerDbContext context)
+public class ClientService(CustomerDbContext context)
  : IClientService
 {
     private readonly CustomerDbContext _context = context;
-    private readonly IMapper _mapper = mapper;
 
     public async Task<IEnumerable<GetClient>> GetAll(){        
-        return _mapper.Map<IEnumerable<Client> , IEnumerable<GetClient>>(
-            await _context.Clients.ToListAsync());
+        return (await _context.Clients.ToListAsync())
+            .Select(c => c.ToGetClient());
     }
     
     public async Task<GetClient> GetBy(int Id){
-        return _mapper.Map<Client, GetClient>(
-            await _context.Clients.FirstOrDefaultAsync(c => c.Id == Id));
+        var client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == Id);
+        return client?.ToGetClient();
     }
 
     public async Task<int> Create(CreateClient dto)
@@ -33,7 +31,7 @@ public class ClientService(IMapper mapper, CustomerDbContext context)
        if(_context.Clients.Any(
              x => x.FirstName == dto.FirstName && x.LastName ==  dto.LastName && x.DOB == dto.DOB)) 
          throw new  DuplicateNameException("client already exists");
-       Client client = _mapper.Map<Client>(dto) ;
+       Client client = dto.ToClient();
        _context.Clients.Add(client);
        await _context.SaveChangesAsync();
        return client.Id;
@@ -50,7 +48,7 @@ public class ClientService(IMapper mapper, CustomerDbContext context)
               && x.LastName ==  dto.LastName 
               && x.DOB == dto.DOB)) 
          throw new  DuplicateNameException("client already exists");
-        _mapper.Map(dto, client);
+        client.UpdateFrom(dto);
         _context.Clients.Update(client);       
         
         return await _context.SaveChangesAsync() > 0 ; 

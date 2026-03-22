@@ -12,15 +12,12 @@ public class AccountOwnerServiceTests : ServiceTests<AccountService>
        
     protected override AccountService SetSUT()
     {
-        _accountService = new AccountService(new Mock<ILogger<AccountService>>().Object, Mapper, Context);
-         _clientService = new ClientService(new Mock<ILogger<ClientService>>().Object, Mapper, Context);
+        _accountService = new AccountService(Context);
+         _clientService = new ClientService(Context);
 
         return 
          new AccountService(
-            LoggerMock.Object,
-            Mapper,
-            Context        
-        );         
+            Context);         
     }
     
     [Test]

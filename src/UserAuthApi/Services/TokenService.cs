@@ -1,11 +1,10 @@
-﻿using AutoMapper;
-using UserAuthApi.Dto;
+﻿using UserAuthApi.Dto;
 using UserAuthEntities;
 
 namespace UserAuthApi.Services;
 
-public class TokenService(JwtService jwt, ILogger<TokenService> logger, AuthDBContext context, IMapper mapper)
-: BaseService<TokenService, AuthDBContext>(logger, mapper, context ), ITokenService
+public class TokenService(JwtService jwt, ILogger<TokenService> logger, AuthDBContext context)
+: BaseService<TokenService, AuthDBContext>(logger, context ), ITokenService
 {
   private readonly JwtService Jwt =jwt;
 

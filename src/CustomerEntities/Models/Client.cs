@@ -17,8 +17,9 @@ namespace CustomerEntities.Models
         { 
             get 
             {
-                var age = DateTime.Today.Year - DOB.Year;
-                if (DateTime.Today.Day > DOB.Day) age++;
+                int age = DateTime.Today.Year - DOB.Year;
+                if (DateTime.Today.Month < DOB.Month || (DateTime.Today.Month == DOB.Month && DateTime.Today.Day < DOB.Day))
+                    age--;
                 return age;
             }            
         }

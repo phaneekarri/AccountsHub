@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using CustomerApi;
+﻿using CustomerApi;
 using CustomerEntities;
 using CustomerEntitiesTest;
 using Infra;
@@ -16,18 +15,11 @@ public abstract class ServiceTests<T>
     protected CustomerDbContext Context;
     protected Mock<ILogger<T>> LoggerMock;
     
-    protected IMapper Mapper;
-
 
     [SetUp]
     protected virtual void SetUp()
     {
         LoggerMock = new Mock<ILogger<T>>();
-        MapperConfiguration mapperConfiguration = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<MappingProfile>();
-            });
-        Mapper = mapperConfiguration.CreateMapper();
         var options = new DbContextOptionsBuilder<CustomerDbContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString()) // Use in-memory database for testing
                 .Options;

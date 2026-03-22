@@ -59,7 +59,8 @@ public class OtpService : BaseService<OtpService, AuthDBContext>, IOtpService
         UserId = userId, 
         UserIdentifierType = userIdentifierType,
         ExpiryIn = settings.ExpiresInSecs, 
-        Token = new Random().Next(settings.OtpCodeMin, settings.OtpCodeMax).ToString()
+        Token = new Random().Next(settings.OtpCodeMin, settings.OtpCodeMax).ToString(),
+        CreatedAt = DateTime.UtcNow
     };
 
 }

@@ -6,7 +6,9 @@ using Microsoft.EntityFrameworkCore;
 namespace CustomerEntities
 {
     public class CustomerDbContext : DbContext
-    {        
+    {
+        public CustomerDbContext(DbContextOptions<CustomerDbContext> options) : base(options) { }
+        
         public DbSet<Client> Clients { get; set; }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<AccountOwner> AccountOwners { get; set;}    

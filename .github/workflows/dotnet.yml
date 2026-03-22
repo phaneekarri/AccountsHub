@@ -59,14 +59,14 @@ jobs:
       run: dotnet build --no-restore
       working-directory: src/UserAuthApi
     - name: Test CustomerEntitiesTest
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --verbosity normal
       working-directory: test/CustomerEntitiesTest
     - name: Test CustomerApiTest
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --verbosity normal
       working-directory: test/CustomerApiTest
     - name: Test UserAuthApiTest
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --verbosity normal
       working-directory: test/UserAuthApiTest
     - name: Test Infra.Tests
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --verbosity normal
       working-directory: test/Infra.Tests

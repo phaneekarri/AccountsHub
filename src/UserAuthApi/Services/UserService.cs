@@ -78,6 +78,10 @@ public class UserService : BaseService<UserService, AuthDBContext>, IUserService
     public async Task<User> Create(User user, string passWordText)
     {
         if(user.Id == default) user.Id = Guid.NewGuid();
+        if (string.IsNullOrEmpty(user.UserName))
+        {
+            throw new ArgumentException("UserName is required for password authentication", nameof(user));
+        }
         // Create user
         Context.Users.Add(user);
         // Create password auth method
@@ -89,7 +93,7 @@ public class UserService : BaseService<UserService, AuthDBContext>, IUserService
             MethodType = AuthMethodType.Password,
             CreatedAt = DateTime.UtcNow,
             IsEnabled = true,
-            UserName = user.UserName, // Assume user.UserName is set
+            UserName = user.UserName,
             PasswordHash = HashPassword(passWordText, salt),
             Salt = Convert.ToBase64String(salt),
             PasswordExpiry = DateTime.UtcNow.AddDays(90)

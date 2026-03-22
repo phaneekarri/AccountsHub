@@ -10,7 +10,7 @@ namespace UserAuthApiTest;
 
 public class TokenServiceTests : ServiceTests<TokenService>
 {
-    private Mock<JwtService> jwtServiceMock;
+    private Mock<JwtService>? jwtServiceMock;
 
     protected override TokenService SetSUT()
     {

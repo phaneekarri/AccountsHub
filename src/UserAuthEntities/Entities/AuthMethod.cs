@@ -9,5 +9,5 @@ public abstract class AuthMethod : ICreated
     public AuthMethodType MethodType { get; set; }
     public DateTime CreatedAt { get; set; }
     public bool IsEnabled { get; set; }
-    public User User { get; set; }
+    public User? User { get; set; }
 }

@@ -1,7 +1,6 @@
 using UserAuthApi;
 using UserAuthApi.Services;
 using UserAuthEntities;
-using UserAuthEntities.InternalUsers;
 
 namespace UserAuthApiTest;
 
@@ -65,21 +64,21 @@ public class UserServiceTests : ServiceTests<UserService>
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal("testuser", result.User.UserName);
+        Assert.Equal("testuser", result.UserName);
     }
 
     [Fact]
     public async Task Verify_EnableMFA()
     {
         // Arrange
-        var user = new User { Email = "test@example.com" };
+        var user = new User { Email = "test@example.com", UserName = "testuser" };
         var internalUser = await SUT.Create(user, "password123");
 
         // Act
-        var result = await SUT.EnableMFA(internalUser.UserId);
+        var result = await SUT.EnableMFA(internalUser.Id, MfaMethod.EmailOtp);
 
         // Assert
         Assert.NotNull(result);
-        Assert.True(result.IsMFAEnabled);
+        Assert.True(result.MfaEnabled);
     }
 }

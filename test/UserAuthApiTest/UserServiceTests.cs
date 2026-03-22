@@ -9,7 +9,7 @@ public class UserServiceTests : ServiceTests<UserService>
 {
     protected override UserService SetSUT() => new UserService(LoggerMock.Object, Context);
     
-    [Test]
+    [Fact]
     public async Task Verify_CreateUser()
     {
         // Arrange
@@ -19,11 +19,11 @@ public class UserServiceTests : ServiceTests<UserService>
         var result = await SUT.Create(user);
 
         // Assert
-        Assert.That(result.Id != Guid.Empty, "User ID not set");
-        Assert.That(result.Email == "test@example.com", "Email not set");
+        Assert.True(result.Id != Guid.Empty);
+        Assert.Equal("test@example.com", result.Email);
     }
 
-    [Test]
+    [Fact]
     public async Task Verify_GetUserById()
     {
         // Arrange
@@ -34,11 +34,11 @@ public class UserServiceTests : ServiceTests<UserService>
         var result = await SUT.Get(created.Id);
 
         // Assert
-        Assert.That(result != null, "User not found");
-        Assert.That(result.Email == "test@example.com", "Email mismatch");
+        Assert.NotNull(result);
+        Assert.Equal("test@example.com", result.Email);
     }
 
-    [Test]
+    [Fact]
     public async Task Verify_GetUserByEmail()
     {
         // Arrange
@@ -49,11 +49,11 @@ public class UserServiceTests : ServiceTests<UserService>
         var result = await SUT.Get(UserIdentifierType.Email, "test@example.com");
 
         // Assert
-        Assert.That(result != null, "User not found");
-        Assert.That(result.Email == "test@example.com", "Email mismatch");
+        Assert.NotNull(result);
+        Assert.Equal("test@example.com", result.Email);
     }
 
-    [Test]
+    [Fact]
     public async Task Verify_GetInternalUser()
     {
         // Arrange
@@ -64,11 +64,11 @@ public class UserServiceTests : ServiceTests<UserService>
         var result = await SUT.Get("testuser");
 
         // Assert
-        Assert.That(result != null, "Internal user not found");
-        Assert.That(result.User.UserName == "testuser", "Username mismatch");
+        Assert.NotNull(result);
+        Assert.Equal("testuser", result.User.UserName);
     }
 
-    [Test]
+    [Fact]
     public async Task Verify_EnableMFA()
     {
         // Arrange
@@ -79,7 +79,7 @@ public class UserServiceTests : ServiceTests<UserService>
         var result = await SUT.EnableMFA(internalUser.UserId);
 
         // Assert
-        Assert.That(result != null, "MFA not enabled");
-        Assert.That(result.IsMFAEnabled, "MFA not enabled");
+        Assert.NotNull(result);
+        Assert.True(result.IsMFAEnabled);
     }
 }

@@ -4,7 +4,6 @@ using Infra;
 using InfraEntities.ModelType;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
 namespace CustomerEntitiesTest
@@ -13,13 +12,13 @@ namespace CustomerEntitiesTest
     {
         public static void IsPrimary(this ModelType testObject)
         {
-            Assert.AreEqual(testObject.Id, 1);
-            Assert.AreEqual(testObject.Description, "Primary");
+            Assert.Equal(1, testObject.Id);
+            Assert.Equal("Primary", testObject.Description);
         }
         public static void IsSecondary(this ModelType testObject)
         {
-            Assert.AreEqual(testObject.Id, 2);
-            Assert.AreEqual(testObject.Description, "Secondary");
+            Assert.Equal(2, testObject.Id);
+            Assert.Equal("Secondary", testObject.Description);
         }
 
         public static CustomerDbContext GetTestDbContext()

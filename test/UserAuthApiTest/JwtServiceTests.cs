@@ -12,15 +12,14 @@ public class JwtServiceTests
     private JwtService sut;
     private Mock<IOptions<JwtSettings>> jwtOptionsMock;
 
-    [SetUp]
-    public void SetUp()
+    public JwtServiceTests()
     {
         jwtOptionsMock = new Mock<IOptions<JwtSettings>>();
         jwtOptionsMock.Setup(o => o.Value).Returns(new JwtSettings { Secret = "supersecretkeythatislongenoughforhmacsha256", Issuer = "test", Audience = "test" });
         sut = new JwtService(jwtOptionsMock.Object);
     }
     
-    [Test]
+    [Fact]
     public void Verify_GenerateToken()
     {
         // Arrange
@@ -30,7 +29,7 @@ public class JwtServiceTests
         var result = sut.GenerateToken(user);
 
         // Assert
-        Assert.That(!string.IsNullOrEmpty(result.accessToken), "Token not generated");
-        Assert.That(result.expiresInSecs > 0, "Expiry not set");
+        Assert.False(string.IsNullOrEmpty(result.accessToken));
+        Assert.True(result.expiresInSecs > 0);
     }
 }

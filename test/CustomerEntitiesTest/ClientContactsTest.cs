@@ -1,25 +1,23 @@
 ﻿using CustomerEntities.Models.Contacts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CustomerEntitiesTest
 {
-    [TestClass]
     public class ClientContactsTest
     {
-    /* [TestMethod]
+    /* [Fact]
     public void ClientPhone_Tests()
     {
         new ClientPhone<PrimaryContact>().ContactType.IsPrimary();
         new ClientPhone<SecondaryContact>().ContactType.IsSecondary();
     }
 
-    [TestMethod]
+    [Fact]
     public void ClientEmail_Tests()
     {
         new ClientEmail<PrimaryContact>().ContactType.IsPrimary();
         new ClientEmail<SecondaryContact>().ContactType.IsSecondary();
     }
-    [TestMethod]
+    [Fact]
     public void ClientAddress_Tests()
     {
         new ClientAddress<PrimaryContact>().ContactType.IsPrimary();

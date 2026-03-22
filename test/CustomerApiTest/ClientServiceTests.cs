@@ -8,7 +8,7 @@ public class ClientServiceTests : ServiceTests<ClientService>
 
     protected override ClientService SetSUT() => new ClientService(Context);
     
-    [Test]
+    [Fact]
     public async Task Verify_CreateClient()
     {
         //Arrange
@@ -16,10 +16,10 @@ public class ClientServiceTests : ServiceTests<ClientService>
         // Act
         var result = await SUT.Create(setUp);
         //Assert        
-        Assert.That(result >0, "Client is not created");
+        Assert.True(result > 0, "Client is not created");
     }
 
-    [Test]
+    [Fact]
     public async Task Verify_UpdateClient()
     {
         //Arrange
@@ -32,13 +32,13 @@ public class ClientServiceTests : ServiceTests<ClientService>
         var result = await SUT.Update(createdClientId, setUp);
         
         //Assert        
-        Assert.That(result, "Client is not updated");
+        Assert.True(result, "Client is not updated");
         var updatedClient = await SUT.GetBy(createdClientId);
-        Assert.That(updatedClient.LastName == "Doe", "client last name is not updated as expected");
-        Assert.That(updatedClient.DOB == new DateOnly(2003,12,22) , "client DOB is not updated as expected");
+        Assert.Equal("Doe", updatedClient.LastName);
+        Assert.Equal(new DateOnly(2003,12,22), updatedClient.DOB);
     }
 
-    [Test]
+    [Fact]
     public async Task Verify_PatchClient()
     {
         //Arrange
@@ -51,14 +51,14 @@ public class ClientServiceTests : ServiceTests<ClientService>
         var result  = await SUT.Patch(createdClientId, setUp);
 
         //Assert        
-        Assert.That(result, "Client is not updated");
+        Assert.True(result, "Client is not updated");
         var updatedClient = await SUT.GetBy(createdClientId);
-        Assert.That(updatedClient.FirstName == "Jim", "client first name is not updated as expected");
-        Assert.That(updatedClient.LastName == "Smith", "client last name is not updated as expected");
-        Assert.That(updatedClient.DOB == new DateOnly(1998,08,12),  "client DOB is not updated as expected");
+        Assert.Equal("Jim", updatedClient.FirstName);
+        Assert.Equal("Smith", updatedClient.LastName);
+        Assert.Equal(new DateOnly(1998,08,12), updatedClient.DOB);
     }
 
-    [Test]
+    [Fact]
     public async Task Verify_DeleteClient()
     {
         //Arrange
@@ -69,9 +69,9 @@ public class ClientServiceTests : ServiceTests<ClientService>
         var result = await SUT.Delete(createdClientId);
 
         //Assert
-        Assert.That(result, "Client is not deleted");
+        Assert.True(result, "Client is not deleted");
         var createdClient = await SUT.GetBy(createdClientId);
-        Assert.IsNull(createdClient);
+        Assert.Null(createdClient);
 
     }
 }

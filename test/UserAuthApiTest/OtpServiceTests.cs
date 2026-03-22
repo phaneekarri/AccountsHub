@@ -18,7 +18,7 @@ public class OtpServiceTests : ServiceTests<OtpService>
         return new OtpService(LoggerMock.Object, Context, otpOptionsMock.Object);
     }
     
-    [Test]
+    [Fact]
     public async Task Verify_CreateOtp()
     {
         // Arrange
@@ -28,12 +28,12 @@ public class OtpServiceTests : ServiceTests<OtpService>
         var result = await SUT.Create(userId, UserIdentifierType.Email);
 
         // Assert
-        Assert.That(result.Id != Guid.Empty, "OTP ID not set");
-        Assert.That(result.UserId == userId, "User ID mismatch");
-        Assert.That(result.UserIdentifierType == UserIdentifierType.Email, "Identifier type mismatch");
+        Assert.True(result.Id != Guid.Empty);
+        Assert.Equal(userId, result.UserId);
+        Assert.Equal(UserIdentifierType.Email, result.UserIdentifierType);
     }
 
-    [Test]
+    [Fact]
     public async Task Verify_GetRecentOtp()
     {
         // Arrange
@@ -44,11 +44,11 @@ public class OtpServiceTests : ServiceTests<OtpService>
         var result = await SUT.GetRecentOtp(userId, UserIdentifierType.Email);
 
         // Assert
-        Assert.That(result != null, "OTP not found");
-        Assert.That(result.UserId == userId, "User ID mismatch");
+        Assert.NotNull(result);
+        Assert.Equal(userId, result.UserId);
     }
 
-    [Test]
+    [Fact]
     public async Task Verify_RemoveOtp()
     {
         // Arrange
@@ -60,6 +60,6 @@ public class OtpServiceTests : ServiceTests<OtpService>
 
         // Assert
         var result = await SUT.GetRecentOtp(userId, UserIdentifierType.Email);
-        Assert.That(result == null, "OTP not removed");
+        Assert.Null(result);
     }
 }

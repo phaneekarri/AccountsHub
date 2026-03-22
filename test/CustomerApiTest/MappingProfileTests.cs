@@ -4,12 +4,11 @@ using CustomerEntities.Models;
 
 namespace CustomerApiTest;
 
-[TestFixture]
 public class MappingExtensionsTests
 {
         
         #region Client Mappings
-        [Test]
+        [Fact]
         public void Verify_CreateClient_Client()
         {     
               //Arrange
@@ -28,11 +27,11 @@ public class MappingExtensionsTests
                                DOB = new DateOnly(2000,02,01)
                             };
                //Assert                            
-              Assert.That(actual.FirstName , Is.EqualTo(expectedClient?.FirstName), "FirstName not matching");
-              Assert.That(actual.LastName , Is.EqualTo(expectedClient?.LastName), "LastName not matching");
-              Assert.That(actual.DOB , Is.EqualTo(expectedClient?.DOB), "DOB not matching");
+              Assert.Equal(expectedClient.FirstName, actual.FirstName);
+              Assert.Equal(expectedClient.LastName, actual.LastName);
+              Assert.Equal(expectedClient.DOB, actual.DOB);
         }
-        [Test]
+        [Fact]
         public void Verify_UpdateClient_Client()
         {
               //Arrange
@@ -47,12 +46,12 @@ public class MappingExtensionsTests
                client.UpdateFrom(setUpClient);
                
                //Assert                            
-              Assert.That(client.FirstName , Is.EqualTo("Test First Name"), "FirstName not matching");
-              Assert.That(client.LastName , Is.EqualTo("Test Last Name"), "LastName not matching");
-              Assert.That(client.DOB , Is.EqualTo(new DateOnly(2000,02,01)), "DOB not matching");
+              Assert.Equal("Test First Name", client.FirstName);
+              Assert.Equal("Test Last Name", client.LastName);
+              Assert.Equal(new DateOnly(2000,02,01), client.DOB);
         }
 
-        [Test]
+        [Fact]
         public void Verify_Client_To_GetClient()
         {
               //Arrange
@@ -73,17 +72,17 @@ public class MappingExtensionsTests
                                Age = DateTime.Now.Year - setUpClient.DOB.Year
                             };
                //Assert                            
-              Assert.That(actual.FirstName , Is.EqualTo(expectedClient?.FirstName), "FirstName not matching");
-              Assert.That(actual.LastName , Is.EqualTo(expectedClient?.LastName), "LastName not matching");
-              Assert.That(actual.DOB , Is.EqualTo(expectedClient?.DOB), "DOB not matching");
-              Assert.That(actual.Age , Is.EqualTo(expectedClient?.Age), "Age not matching");                                
+              Assert.Equal(expectedClient.FirstName, actual.FirstName);
+              Assert.Equal(expectedClient.LastName, actual.LastName);
+              Assert.Equal(expectedClient.DOB, actual.DOB);
+              Assert.Equal(expectedClient.Age, actual.Age);                                
         }
        #endregion
 
        #region Account Mappings
 
 
-       [Test]
+       [Fact]
        public void Verify_AccountOwner_To_GetAccountOwner()
     {
         //Arrange
@@ -94,17 +93,12 @@ public class MappingExtensionsTests
         
         //Assert
         var expected = new GetAccountOwner { Id = 1, ClientId = 1,  };
-        GetAccountOwnerAssertions(actual, expected );
+        Assert.NotNull(actual);
+        Assert.Equal(expected.Id, actual.Id);
+        Assert.Equal(expected.ClientId, actual.ClientId);        
     }
 
-       private void GetAccountOwnerAssertions(GetAccountOwner? actual, GetAccountOwner? expected)
-    {
-        Assert.That(actual != null, "Value is null");
-        Assert.That(actual?.Id == expected?.Id, "Id is not matching");
-        Assert.That(actual?.ClientId == expected?.Id, "Client ID is not matching ");        
-    }
-
-      [Test]
+      [Fact]
       public void Verify_CreateAccount_Account(){
          //Arrange
          CreateAccount setUp = new CreateAccount{
@@ -114,12 +108,12 @@ public class MappingExtensionsTests
          var actual = setUp.ToAccount();
 
          //Assert
-         Assert.That(actual != null, "Value is null");
-         Assert.That(actual?.Title == "Test Title", "Id not matching");
-         Assert.That(actual?.AccountOwners != null, "Owners is null");
+         Assert.NotNull(actual);
+         Assert.Equal("Test Title", actual.Title);
+         Assert.NotNull(actual.AccountOwners);
       }
 
-      [Test]
+      [Fact]
       public void Verify_CreateAccountOwner_AccountOwner()
     {
         //Arrange
@@ -133,16 +127,11 @@ public class MappingExtensionsTests
         //
         AccountOwner expected = new AccountOwner();
         expected.Update(new Client { Id = 1 });
-        CreateAccountOwnerAssertions(actual, expected);
+        Assert.NotNull(actual);
+        Assert.Equal(expected.ClientId, actual.ClientId);
     }
 
-      private void CreateAccountOwnerAssertions(AccountOwner? actual, AccountOwner? expected)
-    {
-        Assert.That(actual != null, "value is null");
-        Assert.That(actual?.ClientId == expected?.ClientId, "ClientId is not matching");
-    }
-
-      [Test]
+      [Fact]
       public void Verify_Account_To_GetAccount()
    {
           //Arrange
@@ -169,13 +158,16 @@ public class MappingExtensionsTests
                   new GetAccountOwner {Id = 2, ClientId = 2, },
                   new GetAccountOwner {Id = 3, ClientId = 3, }               
           };
-          Assert.That(actual != null, "Value is null");
-          Assert.That(actual?.Id == 1, "Id not matching");
-          Assert.That(actual?.Title == "Test Title", "Id not matching");
-          Assert.That(actual?.Owners != null, "Owners is null");
-          Assert.That(actual?.Owners.Count() == 3, "Owners count not matching"); 
-          var actualOwnersList = actual?.Owners.ToList();
-          for(int i= 0; i<3; i++) GetAccountOwnerAssertions(actualOwnersList?[i],expectedOwners[i]);
+          Assert.NotNull(actual);
+          Assert.Equal(1, actual.Id);
+          Assert.Equal("Test Title", actual.Title);
+          Assert.NotNull(actual.Owners);
+          Assert.Equal(3, actual.Owners.Count()); 
+          var actualOwnersList = actual.Owners.ToList();
+          for(int i= 0; i<3; i++) {
+              Assert.Equal(expectedOwners[i].Id, actualOwnersList[i].Id);
+              Assert.Equal(expectedOwners[i].ClientId, actualOwnersList[i].ClientId);
+          }
    }
        
    #endregion

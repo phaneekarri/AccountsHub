@@ -1,27 +1,24 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace CustomerEntitiesTest;
 
-[TestClass]
-public abstract class DBTests<TContext> where TContext : DbContext 
+public abstract class DBTests<TContext> : IDisposable where TContext : DbContext 
 {
   protected TContext context;
   protected IDbContextTransaction transaction;
 
     protected abstract TContext CreateDBContext();
 
-    [TestInitialize]
-    public void Initialize()
+    public DBTests()
     {
         context = CreateDBContext();
        // transaction = context.Database.BeginTransaction();
         context.Database.EnsureCreated();
     }
 
-    [TestCleanup]
-    public void cleanup()
+    public void Dispose()
     {
         //transaction.Rollback();
         //transaction.Dispose();

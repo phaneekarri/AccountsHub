@@ -8,16 +8,14 @@ using Moq;
 
 namespace CustomerApiTest;
 
-[TestFixture]
-public abstract class ServiceTests<T>
+public abstract class ServiceTests<T> : IDisposable
 {
      protected T SUT;
     protected CustomerDbContext Context;
     protected Mock<ILogger<T>> LoggerMock;
     
 
-    [SetUp]
-    protected virtual void SetUp()
+    protected ServiceTests()
     {
         LoggerMock = new Mock<ILogger<T>>();
         var options = new DbContextOptionsBuilder<CustomerDbContext>()
@@ -32,8 +30,7 @@ public abstract class ServiceTests<T>
     
     protected abstract T SetSUT();
 
-    [TearDown]
-    public void TearDown()
+    public void Dispose()
     {
         Context.Database.EnsureDeleted();
         Context.Dispose();

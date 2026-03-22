@@ -1,15 +1,13 @@
 ﻿using System.Linq;
 using CustomerEntities;
 using CustomerEntities.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CustomerEntitiesTest;
 
-[TestClass]
 public class CustomerDbContextTests : DBTests<CustomerDbContext>
 {
     protected override CustomerDbContext CreateDBContext() => TestExtension.GetTestDbContext();
-    [TestMethod]
+    [Fact]
     public void CanAddAndRetrieveYourModel()
     {       //Arrange
             context.Accounts.Add(new Account { Title = "TestName" });
@@ -17,8 +15,8 @@ public class CustomerDbContextTests : DBTests<CustomerDbContext>
             //Act
             var model = context.Accounts.FirstOrDefault(m => m.Title == "TestName");
             // Assert
-            Assert.IsNotNull(model);
-            Assert.AreEqual("TestName", model.Title);
+            Assert.NotNull(model);
+            Assert.Equal("TestName", model.Title);
     }
 
 }

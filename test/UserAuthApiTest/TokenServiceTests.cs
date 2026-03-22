@@ -21,7 +21,7 @@ public class TokenServiceTests : ServiceTests<TokenService>
         return new TokenService(jwtServiceMock.Object, LoggerMock.Object, Context);
     }
     
-    [Test]
+    [Fact]
     public void Verify_GenerateToken()
     {
         // Arrange
@@ -31,7 +31,7 @@ public class TokenServiceTests : ServiceTests<TokenService>
         var result = SUT.GenerateToken(user);
 
         // Assert
-        Assert.That(result.accessToken == "mockToken", "Token not generated");
-        Assert.That(result.expiresInSecs == 3600, "Expiry mismatch");
+        Assert.Equal("mockToken", result.accessToken);
+        Assert.Equal(3600, result.expiresInSecs);
     }
 }

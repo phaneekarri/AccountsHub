@@ -20,7 +20,7 @@ public class AccountOwnerServiceTests : ServiceTests<AccountService>
             Context);         
     }
     
-    [Test]
+    [Fact]
     public async Task Verify_CreateAccountOwners()
     {
         // Arrange 
@@ -34,26 +34,26 @@ public class AccountOwnerServiceTests : ServiceTests<AccountService>
 
         //Assert
         
-        Assert.That(result == true, "Failed saving");
+        Assert.True(result, "Failed saving");
        
         var savedAccount = Context.AccountOwners.Where(x => x.AccountId == accountId && x.ClientId == setUp.Id).ToList();
-        Assert.That(savedAccount.Count > 0, "AccountOwner with given details are not saved");
+        Assert.True(savedAccount.Count > 0, "AccountOwner with given details are not saved");
 
     }
     
-    [Test]
+    [Fact]
     public async Task Verify_CreateAccountOwners_EmptyOwners()
     {
         // Arrange 
         var accountId = await _accountService!.Create(new CreateAccount { Title = "Test title"});
             
         // Act    
-       Assert.ThrowsAsync<ArgumentNullException>(async() => await SUT.AddOwners(accountId, null));
+       await Assert.ThrowsAsync<ArgumentNullException>(async() => await SUT.AddOwners(accountId, null));
 
         //Assert
     }
 
-    [Test]
+    [Fact]
     public async Task Verify_DeleteAccountOwnersByClient()
     {
         //Arrange
@@ -66,10 +66,10 @@ public class AccountOwnerServiceTests : ServiceTests<AccountService>
         //Act
          var result = await SUT.DeleteOwner(accountId, clientId);
         //Assert
-        Assert.IsTrue(result, "Delete Account owners by client failed");
+        Assert.True(result, "Delete Account owners by client failed");
     }
 
-        [Test]
+        [Fact]
     public async Task Verify_DeleteAccountOwnersByAccountId()
     {
         //Arrange
@@ -82,27 +82,27 @@ public class AccountOwnerServiceTests : ServiceTests<AccountService>
         //Act
          var result = await SUT.DeleteOwners(accountId);
         //Assert
-        Assert.IsTrue(result, "Delete Account owners by accountId failed");
+        Assert.True(result, "Delete Account owners by accountId failed");
         
     }
 
-    [Test]
+    [Fact]
     public async Task Verify_DeleteAccountOwnersByAccountId_Throws_KeynotfoundException()
     {
         //Arrange
 
         //Act
-         Assert.ThrowsAsync<KeyNotFoundException>(async () => await SUT.DeleteOwners(1));
+         await Assert.ThrowsAsync<KeyNotFoundException>(async () => await SUT.DeleteOwners(1));
         //Assert
     }
 
-    [Test]
+    [Fact]
     public async Task Verify_DeleteAccountOwnersByClientId_Throws_KeyNotFoundException()
     {
         //Arrange
 
         //Act
-        Assert.ThrowsAsync<KeyNotFoundException>(async () =>await SUT.DeleteOwner(1,1));
+        await Assert.ThrowsAsync<KeyNotFoundException>(async () =>await SUT.DeleteOwner(1,1));
         //Assert
     }
 }

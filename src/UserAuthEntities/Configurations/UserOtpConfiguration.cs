@@ -13,6 +13,7 @@ public class UserOtpConfiguration : IEntityTypeConfiguration<UserOtp>
             x=> x.ToString(),
             x => (UserIdentifierType)Enum.Parse(typeof(UserIdentifierType), x)
         ).HasMaxLength(16);
+        builder.Property(x => x.OtpType).HasConversion<string>().HasMaxLength(12);
         builder.Property(x => x.ExpirySpan)
         .HasConversion(
             x=> x.ToString(),

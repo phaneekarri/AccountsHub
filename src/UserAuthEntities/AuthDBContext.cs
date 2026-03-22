@@ -1,8 +1,6 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
 using UserAuthEntities.Configurations;
-using UserAuthEntities.InternalUsers;
-using UserAuthEntities.OIDCUsers;
 
 namespace UserAuthEntities;
 
@@ -15,18 +13,18 @@ public class AuthDBContext : DbContext
    public DbSet<User> Users  => Set<User>();
    public DbSet<UserOtp> UserOtps => Set<UserOtp>();
    public DbSet<UserAccessToken> UserAccessTokens => Set<UserAccessToken>();
-   public DbSet<InternalUser> InternalUsers => Set<InternalUser>();
-   public DbSet<UserPassWord> UserPassWords => Set<UserPassWord>();
-   public DbSet<OAuthUser> OAuthUsers => Set<OAuthUser>();
+   public DbSet<AuthMethod> AuthMethods => Set<AuthMethod>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder               
         .ApplyConfiguration(new UserConfiguration())
-        .ApplyConfiguration(new UserPasswordConfiguration())
+        .ApplyConfiguration(new AuthMethodConfiguration())
+        .ApplyConfiguration(new PasswordAuthMethodConfiguration())
+        .ApplyConfiguration(new OAuthAuthMethodConfiguration())
+        .ApplyConfiguration(new OtpVerificationAuthMethodConfiguration())
         .ApplyConfiguration(new UserOtpConfiguration())
-        .ApplyConfiguration(new UserAccessTokenConfiguration())
-        .ApplyConfiguration(new InternalUserConfiguration());
+        .ApplyConfiguration(new UserAccessTokenConfiguration());
     }
             
 

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using UserAuthApi.Exceptions;
 using UserAuthEntities;
-using UserAuthEntities.InternalUsers;
+using System.Security.Cryptography;
 
 namespace UserAuthApi.Services;
 
@@ -26,18 +26,21 @@ public class UserService : BaseService<UserService, AuthDBContext>, IUserService
         {
             if(ex is InvalidOperationException && ex.Message == "Sequence contains more than one element.")
             {
-                throw new ConflictException("Multiple users with same username exists.", ex);
+                throw new ConflictException("Multiple users with same identifier exists.", ex);
             }
             else throw;
         }        
     }
     public async Task<User?> Get(Guid id) => await Context.Users.FindAsync(id);
-    public async Task<InternalUser?> Get(string userName)
+    public async Task<User?> Get(string userName)
     {
         try
         {
-            return  await GetQuery()             
-            .SingleOrDefaultAsync(x => userName == x.User.UserName);
+            var authMethod = await Context.AuthMethods
+                .OfType<PasswordAuthMethod>()
+                .Include(x => x.User)
+                .SingleOrDefaultAsync(x => x.UserName == userName);
+            return authMethod?.User;
         }
         catch(Exception ex)
         {
@@ -48,24 +51,21 @@ public class UserService : BaseService<UserService, AuthDBContext>, IUserService
             else throw;
         }
     }
-    public async Task<InternalUser?> EnableMFA(Guid userId)
+    public async Task<User?> EnableMFA(Guid userId, MfaMethod method)
     {
          try
         {
-            var user =  await GetQuery()                
-            .SingleOrDefaultAsync(x => userId == x.UserId);
+            var user = await Context.Users.FindAsync(userId);
             if(user == null ) throw new KeyNotFoundException("User not found");
-            user.EnableMFA();
+            user.MfaEnabled = true;
+            user.MfaMethod = method;
             await Context.SaveChangesAsync();
             return user;
         }
         catch(Exception ex)
         {
-            if(ex is InvalidOperationException && ex.Message == "Sequence contains more than one element.")
-            {
-                throw new ConflictException("Multiple users with same user information exists.", ex);
-            }
-            else throw;
+            Logger.LogError(ex, "Error enabling MFA for user {UserId}", userId);
+            throw;
         }
     }
     public async Task<User> Create(User user)
@@ -75,20 +75,113 @@ public class UserService : BaseService<UserService, AuthDBContext>, IUserService
         await Context.SaveChangesAsync();
         return user;
     }
-    public async Task<InternalUser> Create(User user, string passWordText)
+    public async Task<User> Create(User user, string passWordText)
     {
         if(user.Id == default) user.Id = Guid.NewGuid();
-        var internalUser = new InternalUser {
-                Id = Guid.NewGuid(),
-                User = user                  
-            };
-        internalUser.ResetPassword(passWordText, 90);
-        Context.InternalUsers.Add(internalUser);
+        // Create user
+        Context.Users.Add(user);
+        // Create password auth method
+        var salt = GenerateSalt();
+        var passwordMethod = new PasswordAuthMethod
+        {
+            Id = Guid.NewGuid(),
+            UserId = user.Id,
+            MethodType = AuthMethodType.Password,
+            CreatedAt = DateTime.UtcNow,
+            IsEnabled = true,
+            UserName = user.UserName, // Assume user.UserName is set
+            PasswordHash = HashPassword(passWordText, salt),
+            Salt = Convert.ToBase64String(salt),
+            PasswordExpiry = DateTime.UtcNow.AddDays(90)
+        };
+        Context.AuthMethods.Add(passwordMethod);
         await Context.SaveChangesAsync();
-        return internalUser;
+        return user;
     }
-    private IQueryable<InternalUser> GetQuery() => 
-        Context.InternalUsers
-            .Include(x => x.User)
-            .Include(x=> x.PassWords);
+
+    public async Task<bool> VerifyPassword(string userName, string password)
+    {
+        var authMethod = await Context.AuthMethods
+            .OfType<PasswordAuthMethod>()
+            .FirstOrDefaultAsync(x => x.UserName == userName && x.IsEnabled);
+        
+        if (authMethod == null) return false;
+        
+        var salt = Convert.FromBase64String(authMethod.Salt);
+        var hash = HashPassword(password, salt);
+        return hash == authMethod.PasswordHash;
+    }
+
+    public async Task<User?> CreateOrLinkOAuthUser(string email, OAuthProvider provider, string providerUserId, string? providerEmail)
+    {
+        var existingUser = await Context.Users.FirstOrDefaultAsync(x => x.Email == email);
+        
+        if (existingUser != null)
+        {
+            // Link OAuth to existing user
+            var existingOAuth = await Context.AuthMethods
+                .OfType<OAuthAuthMethod>()
+                .FirstOrDefaultAsync(x => x.UserId == existingUser.Id && x.Provider == provider);
+            
+            if (existingOAuth == null)
+            {
+                var oauthMethod = new OAuthAuthMethod
+                {
+                    Id = Guid.NewGuid(),
+                    UserId = existingUser.Id,
+                    MethodType = AuthMethodType.OAuth,
+                    CreatedAt = DateTime.UtcNow,
+                    IsEnabled = true,
+                    Provider = provider,
+                    ProviderUserId = providerUserId,
+                    ProviderEmail = providerEmail
+                };
+                Context.AuthMethods.Add(oauthMethod);
+                await Context.SaveChangesAsync();
+            }
+            return existingUser;
+        }
+
+        // Create new user with OAuth
+        var newUser = new User
+        {
+            Id = Guid.NewGuid(),
+            Email = email,
+            CreatedAt = DateTime.UtcNow
+        };
+        Context.Users.Add(newUser);
+
+        var newOAuthMethod = new OAuthAuthMethod
+        {
+            Id = Guid.NewGuid(),
+            UserId = newUser.Id,
+            MethodType = AuthMethodType.OAuth,
+            CreatedAt = DateTime.UtcNow,
+            IsEnabled = true,
+            Provider = provider,
+            ProviderUserId = providerUserId,
+            ProviderEmail = providerEmail
+        };
+        Context.AuthMethods.Add(newOAuthMethod);
+        await Context.SaveChangesAsync();
+
+        return newUser;
+    }
+
+    private static byte[] GenerateSalt(int size = 16)
+    {
+        var salt = new byte[size];
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(salt);
+        return salt;
+    }
+
+    private static string HashPassword(string password, byte[] salt)
+    {
+        using (var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 10000, HashAlgorithmName.SHA256))
+        {
+            byte[] hash = pbkdf2.GetBytes(32);
+            return Convert.ToBase64String(hash);
+        }
+    }
 }

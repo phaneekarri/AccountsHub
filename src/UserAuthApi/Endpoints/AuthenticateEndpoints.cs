@@ -40,25 +40,22 @@ public static class AuthenticationEndpoints
 
         app.MapGet("/auth/google/callback", async (
             [FromQuery] string code,
-            [FromServices] GoogleAuthProvider authProvider,
-            [FromServices] ITokenService token,
-            [FromServices] IUserLogin process,
+            [FromServices] IOAuthLogin oauthProcess,
             CancellationToken cancellation) =>
         {
-            if (string.IsNullOrEmpty(code))
-                return Results.BadRequest("Authorization code is missing");
-            var userIdentity = await authProvider.AuthenticateAsync(code, cancellation);
-            if (userIdentity != null)
+            try
             {
-                var user = await process.LogIn(
-                    new UserLoginModel(UserIdentifierType.Email, userIdentity.Email));
-                return Results.Ok(token.GenerateToken(new User
-                {
-                    Id = user.Id,
-                    Email = user.Email
-                }));
+                var token = await oauthProcess.AuthenticateWithGoogle(code, cancellation);
+                return Results.Ok(token);
             }
-            return Results.BadRequest();
+            catch (ValidationException ex)
+            {
+                return Results.BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Results.Json(new { message = "Authentication failed", error = ex.Message }, statusCode: 500);
+            }
         })
         .WithName("Authenticate-GoogleUser");
     }
@@ -66,6 +63,7 @@ public static class AuthenticationEndpoints
     public static void RegisterGoogleAuth(this WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<GoogleAuthProvider>();
+        builder.Services.AddScoped<IOAuthLogin, OAuthLogin>();
         builder.Services.AddOptions<GoogleAuthSettings>()
             .Bind(builder.Configuration.GetSection("GoolgeAuth"))
             .Validate(options => !string.IsNullOrEmpty(options.Secret), "Google Auth Client Secret is required")

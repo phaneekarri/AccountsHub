@@ -1,4 +1,5 @@
-﻿using CustomerEntities;
+﻿using System;
+using CustomerEntities;
 using Infra;
 using InfraEntities.ModelType;
 using Microsoft.EntityFrameworkCore;
@@ -25,11 +26,11 @@ namespace CustomerEntitiesTest
         {            
             var options = 
                 new DbContextOptionsBuilder<CustomerDbContext>()
-                .UseSqlite("Data Source=mydatabase.db")
+                .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
                 var userResolverMoq = new Mock<IUserResolver>();
                  userResolverMoq.Setup( r => r.Get()).Returns("test_user");
-            return new CustomerDbContext();
+            return new CustomerDbContext(options);
         }
 
         public static ModelBuilder GetTestModelBuilder()

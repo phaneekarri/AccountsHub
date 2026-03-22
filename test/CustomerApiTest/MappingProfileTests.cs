@@ -70,7 +70,7 @@ public class MappingExtensionsTests
                                FirstName = "Test First Name",
                                LastName = "Test Last Name",  
                                DOB = new DateOnly(2000,02,01),
-                               Age = 26
+                               Age = DateTime.Now.Year - setUpClient.DOB.Year
                             };
                //Assert                            
               Assert.That(actual.FirstName , Is.EqualTo(expectedClient?.FirstName), "FirstName not matching");

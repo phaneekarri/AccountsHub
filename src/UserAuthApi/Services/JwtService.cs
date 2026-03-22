@@ -37,7 +37,7 @@ public class JwtService : ITokenService
         _audience = settings.Audience;
     }
 
-    public AuthTokenModel GenerateToken(User user)
+    public virtual AuthTokenModel GenerateToken(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(_secret);

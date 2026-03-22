@@ -1,18 +1,16 @@
-﻿using CustomerApi;
-using CustomerEntities;
-using CustomerEntitiesTest;
-using Infra;
+using UserAuthApi;
+using UserAuthEntities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace CustomerApiTest;
+namespace UserAuthApiTest;
 
 [TestFixture]
 public abstract class ServiceTests<T>
 {
      protected T SUT;
-    protected CustomerDbContext Context;
+    protected AuthDBContext Context;
     protected Mock<ILogger<T>> LoggerMock;
     
 
@@ -20,12 +18,10 @@ public abstract class ServiceTests<T>
     protected virtual void SetUp()
     {
         LoggerMock = new Mock<ILogger<T>>();
-        var options = new DbContextOptionsBuilder<CustomerDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString()) // Use in-memory database for testing
+        var options = new DbContextOptionsBuilder<AuthDBContext>()
+                .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
-        var mockUserResolver = new Mock<IUserResolver>();
-        mockUserResolver.Setup(c => c.Get()).Returns("Test_User");
-        Context = new CustomerDbContext(options);        
+        Context = new AuthDBContext(options);        
         Context.Database.EnsureCreated();
         SUT = SetSUT();
     }

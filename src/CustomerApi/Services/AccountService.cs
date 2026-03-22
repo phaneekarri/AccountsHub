@@ -86,6 +86,7 @@ public class AccountService(CustomerDbContext context)
         var account = await context.Accounts
         .Include( a => a.AccountOwners)
         .FirstOrDefaultAsync(c => c.Id == Id);
+        if (account == null) throw new KeyNotFoundException("Account not found");
         account.DeleteOwner(ClientId);
         return await context.SaveChangesAsync() >0;
     }
@@ -95,6 +96,7 @@ public class AccountService(CustomerDbContext context)
         var account = await context.Accounts
         .Include( a => a.AccountOwners)
         .FirstOrDefaultAsync(c => c.Id == Id);
+        if (account == null) throw new KeyNotFoundException("Account not found");
         account.DeleteAllOwners();
         return await context.SaveChangesAsync() >0;
     }    

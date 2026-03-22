@@ -36,8 +36,8 @@ public class AccountOwnerServiceTests : ServiceTests<AccountService>
         
         Assert.That(result == true, "Failed saving");
        
-        var savedAccount = Context.AccountOwners.Where(x => x.AccountId == 1 && x.ClientId == 2).ToList();
-        Assert.NotNull(savedAccount != null || savedAccount?.Count > 0, "AccountOwner with given details are not saved");
+        var savedAccount = Context.AccountOwners.Where(x => x.AccountId == accountId && x.ClientId == setUp.Id).ToList();
+        Assert.That(savedAccount.Count > 0, "AccountOwner with given details are not saved");
 
     }
     
@@ -82,7 +82,7 @@ public class AccountOwnerServiceTests : ServiceTests<AccountService>
         //Act
          var result = await SUT.DeleteOwners(accountId);
         //Assert
-        Assert.IsTrue(result, "Delete Account owners by client failed");
+        Assert.IsTrue(result, "Delete Account owners by accountId failed");
         
     }
 
@@ -97,7 +97,7 @@ public class AccountOwnerServiceTests : ServiceTests<AccountService>
     }
 
     [Test]
-    public async Task Verify_DeleteAccountOwnersByClietId_Throws_KeynotfoundException()
+    public async Task Verify_DeleteAccountOwnersByClientId_Throws_KeyNotFoundException()
     {
         //Arrange
 

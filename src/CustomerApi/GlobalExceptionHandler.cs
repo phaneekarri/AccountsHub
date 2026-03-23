@@ -19,7 +19,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger)
         Exception exception,
         CancellationToken cancellationToken)
      {
-        httpContext.Response.ContentType = "text/plain; charset=utf-8 ";
+        httpContext.Response.ContentType = "application/problem+json; charset=utf-8";
         var problemDetails = new ProblemDetails
         {
             Title = "An unexpected error occurred.",

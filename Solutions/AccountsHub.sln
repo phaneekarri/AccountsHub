@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserAuthApi", "..\src\UserA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerApiTest", "..\test\CustomerApiTest\CustomerApiTest.csproj", "{8AF71E3B-5B5B-4A7A-BAD6-4533DD4A0178}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserAuthMigrations", "..\src\UserAuthMigrations\UserAuthMigrations.csproj", "{231EA612-D438-4849-88BF-D9C96D6269A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,10 @@ Global
 		{8AF71E3B-5B5B-4A7A-BAD6-4533DD4A0178}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8AF71E3B-5B5B-4A7A-BAD6-4533DD4A0178}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8AF71E3B-5B5B-4A7A-BAD6-4533DD4A0178}.Release|Any CPU.Build.0 = Release|Any CPU
+		{231EA612-D438-4849-88BF-D9C96D6269A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{231EA612-D438-4849-88BF-D9C96D6269A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{231EA612-D438-4849-88BF-D9C96D6269A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{231EA612-D438-4849-88BF-D9C96D6269A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

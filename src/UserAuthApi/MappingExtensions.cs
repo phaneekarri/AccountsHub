@@ -1,6 +1,5 @@
 using UserAuthApi.Dto;
 using UserAuthEntities;
-using UserAuthEntities.InternalUsers;
 
 namespace UserAuthApi;
 
@@ -32,20 +31,21 @@ public static class MappingExtensions
         return new User
         {
             Email = dto.Email,
-            Phone = dto.Phone
+            Phone = dto.Phone,
+            UserName = dto.UserName
         };
     }
 
-    // InternalUser mappings
-    public static InternalUserDto ToInternalUserDto(this InternalUser internalUser)
+    // User mappings to DTO
+    public static InternalUserDto ToInternalUserDto(this User user)
     {
         return new InternalUserDto
         {
-            Id = internalUser.User.Id,
-            Email = internalUser.User.Email,
-            Phone = internalUser.User.Phone,
-            UserName = internalUser.User.UserName,
-            IsMFAEnabled = internalUser.IsMFAEnabled
+            Id = user.Id,
+            Email = user.Email,
+            Phone = user.Phone,
+            UserName = user.UserName,
+            IsMFAEnabled = user.MfaEnabled
         };
     }
 

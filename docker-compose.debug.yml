@@ -39,8 +39,10 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__AuthDatabase=${AUTH_DB_CONNECTION_STRING}
+      - ConnectionStrings__AuthDatabaseMigration=Data Source=host.docker.internal,1433;Database=UserDB;Integrated Security=false;TrustServerCertificate=True;User Id=migrationuser;Password=${AUTH_DB_MIGRATION_PASSWORD}
     depends_on:
-      - userdb
+      userdb:
+        condition: service_healthy
 
   userdb:
     image: mcr.microsoft.com/mssql/server:2022-CU14-ubuntu-20.04
@@ -49,11 +51,25 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=${AUTH_DB_SA_PASSWORD}
+      - API_USER_PASSWORD=${API_USER_PASSWORD}
+      - AUTH_DB_MIGRATION_PASSWORD=${AUTH_DB_MIGRATION_PASSWORD}
     ports:
       - "1433:1433"
     volumes:  
       - sql_data:/var/opt/mssql
-    #command: /bin/bash -c "/opt/mssql/bin/sqlservr & sleep 30 && /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '${AUTH_DB_SA_PASSWORD}' -i /mssql_data/userdb-init.sql"
+      - ./init-db.sh:/tmp/init-db.sh
+    command: >
+      bash -c "
+      /opt/mssql/bin/sqlservr &
+      sleep 30 &&
+      bash /tmp/init-db.sh &&
+      wait"
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '${AUTH_DB_SA_PASSWORD}' -Q 'SELECT 1' && /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '${AUTH_DB_SA_PASSWORD}' -Q 'SELECT name FROM sys.server_principals WHERE name = \"apiuser\"' | grep -q apiuser"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 40s
    
 volumes:
   mysql_data:

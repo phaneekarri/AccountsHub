@@ -14,6 +14,7 @@ public class AuthDBContext : DbContext
    public DbSet<UserOtp> UserOtps => Set<UserOtp>();
    public DbSet<UserAccessToken> UserAccessTokens => Set<UserAccessToken>();
    public DbSet<AuthMethod> AuthMethods => Set<AuthMethod>();
+   public DbSet<PasswordResetToken> PasswordResetTokens => Set<PasswordResetToken>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -24,7 +25,8 @@ public class AuthDBContext : DbContext
         .ApplyConfiguration(new OAuthAuthMethodConfiguration())
         .ApplyConfiguration(new OtpVerificationAuthMethodConfiguration())
         .ApplyConfiguration(new UserOtpConfiguration())
-        .ApplyConfiguration(new UserAccessTokenConfiguration());
+        .ApplyConfiguration(new UserAccessTokenConfiguration())
+        .ApplyConfiguration(new PasswordResetTokenConfiguration());
     }
             
 

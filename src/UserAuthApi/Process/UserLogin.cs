@@ -49,6 +49,22 @@ public class UserLogin : IUserLogin
       if(otp?.Otp == null) throw new ValidationException("Invalid Otp Code");
       if(await _otpProcess.Verify(otp.Id, otp.UserIdentifierType, otp.Otp))
       {
+        // Check if MFA is enabled
+        if (user.MfaEnabled)
+        {
+            // Generate MFA OTP
+            var mfaIdentifier = user.MfaMethod == MfaMethod.EmailOtp ? user.Email : user.Phone;
+            if (string.IsNullOrEmpty(mfaIdentifier))
+                throw new ValidationException("MFA is enabled but no valid email or phone on file");
+            
+            var mfaIdentifierType = user.MfaMethod == MfaMethod.EmailOtp ? 
+                UserIdentifierType.Email : UserIdentifierType.Phone;
+            
+            await _otpProcess.Generate(user.Id, mfaIdentifierType, OtpType.Mfa);
+            // Return response indicating MFA is required
+            return new AuthTokenModel("MFA_REQUIRED", 300); // 5 min expiry for user to verify MFA
+        }
+        
         return _tokenService.GenerateToken(user);
       }
        else throw new ValidationException("Invalid Otp Code");

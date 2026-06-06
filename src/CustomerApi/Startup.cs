@@ -30,6 +30,7 @@ namespace CustomerApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddExceptionHandler<GlobalExceptionHandler>();
+            services.AddProblemDetails();
             ConfigureBusinessServices(services);
             services.AddDbContext<CustomerDbContext>((sp, options) =>
             {

@@ -35,3 +35,11 @@ public record OtpVerficationModel(string UserId, string? Otp, UserIdentifierType
 
 }
 public record AuthTokenModel(string accessToken , int expiresInSecs);
+
+public record ForgotPasswordRequest(string Identifier, UserIdentifierType IdentifierType);
+
+public record ResetPasswordRequest(string Token, string NewPassword);
+
+public record ProfileDto(Guid Id, string? UserName, string? Email, string? Phone);
+
+public record UpdateProfileRequest(string? UserName, string? Email, string? Phone);

@@ -97,8 +97,40 @@ public class SendOtpValidator : AbstractValidator<SendOtpModel>
     {
         RuleFor(x=> x.UserId)
         .Must(x => Guid.TryParse(x, out _)).WithMessage("User is invalid");
+    }
+}
 
-        RuleFor(x=> x.Receiver)
-        .IsInEnum().WithMessage("Receiver is invalid.");
+public class ForgotPasswordValidator : AbstractValidator<ForgotPasswordRequest>
+{
+    public ForgotPasswordValidator()
+    {
+        RuleFor(x => x.IdentifierType).IsInEnum().WithMessage("Invalid identifier type");
+        When(x => x.IdentifierType == UserIdentifierType.Email, () =>
+        {
+            RuleFor(x => x.Identifier).NotEmpty().EmailAddress().WithMessage("Valid email required");
+        });
+        When(x => x.IdentifierType == UserIdentifierType.Phone, () =>
+        {
+            RuleFor(x => x.Identifier).NotEmpty().Matches(@"^\+?[1-9]\d{1,14}$").WithMessage("Valid phone required");
+        });
+    }
+}
+
+public class ResetPasswordValidator : AbstractValidator<ResetPasswordRequest>
+{
+    public ResetPasswordValidator()
+    {
+        RuleFor(x => x.Token).NotEmpty().WithMessage("Token is required");
+        RuleFor(x => x.NewPassword).SetValidator(new PasswordValidator());
+    }
+}
+
+public class UpdateProfileValidator : AbstractValidator<UpdateProfileRequest>
+{
+    public UpdateProfileValidator()
+    {
+        RuleFor(x => x.UserName).MinimumLength(5).MaximumLength(50).When(x => !string.IsNullOrEmpty(x.UserName));
+        RuleFor(x => x.Email).EmailAddress().When(x => !string.IsNullOrEmpty(x.Email));
+        RuleFor(x => x.Phone).Matches(@"^\+?[1-9]\d{1,14}$").When(x => !string.IsNullOrEmpty(x.Phone));
     }
 }

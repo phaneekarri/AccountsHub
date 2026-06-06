@@ -9,7 +9,7 @@ namespace UserAuthApiTest;
 
 public class OtpServiceTests : ServiceTests<OtpService>
 {
-    private Mock<IOptions<OtpSettings>> otpOptionsMock;
+    private Mock<IOptions<OtpSettings>>? otpOptionsMock;
 
     protected override OtpService SetSUT()
     {

@@ -1,5 +1,5 @@
 namespace UserAuthApi.Settings;
-internal record AuthSettings
+public record AuthSettings
 {
    public required string ClientId { get; init;}
    public required string Secret {get; init;}
@@ -9,4 +9,4 @@ internal record AuthSettings
    public required string UserInfoEndpointURL {get; init;}
 }
 
-internal record GoogleAuthSettings : AuthSettings {};
+public record GoogleAuthSettings : AuthSettings {};

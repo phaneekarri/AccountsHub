@@ -6,13 +6,13 @@ using UserAuthApi.Settings;
 
 namespace UserAuthApi.AuthProviders;
 
-internal interface IAuthToken{
+public interface IAuthToken{
      public string AccessToken {get; init;}
 }
-internal record AuthProviderUser(string Id, string Email, string Name);
-internal record GoogleUser(string Id, string Email, string Name) 
+public record AuthProviderUser(string Id, string Email, string Name);
+public record GoogleUser(string Id, string Email, string Name) 
 : AuthProviderUser(Id, Email, Name);
-internal abstract class AuthProvider<TToken, TUser>
+public abstract class AuthProvider<TToken, TUser>
 (
     IOptions<AuthSettings> settings, 
     IHttpClientFactory httpClientFactory,

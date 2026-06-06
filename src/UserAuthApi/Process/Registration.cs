@@ -35,8 +35,7 @@ public class Registration : IRegistration
          || (!string.IsNullOrEmpty(userRegisterModel.Phone) && await _userService.Get(UserIdentifierType.Phone, userRegisterModel.Phone) != null))
          throw new ConflictException("User already exists");
         var userModel = userRegisterModel.ToUser();
-        var user = await _userService.Create(userModel);
-        var internalUser = await _userService.Create(user, userRegisterModel.PasswordText);
-        return internalUser.ToInternalUserDto();
+        var user = await _userService.Create(userModel, userRegisterModel.PasswordText);
+        return user.ToInternalUserDto();
     }
 }

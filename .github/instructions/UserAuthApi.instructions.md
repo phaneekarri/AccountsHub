@@ -8,7 +8,15 @@
   - 400 → bad request
   - 401 → unauthorized
 - **Error responses must use ProblemDetails** (e.g., `Results.Problem(...)` in Minimal APIs).
+- Create Endpoint classes in `src/UserAuthApi/Endpoints/` to organize routes.
+- Create service classes in `src/UserAuthApi/Services/` for business logic.
+- Create business processes in `src/UserAuthApi/Process/` for complex operations.
 - Delegate business logic to services.
 - Validate request models using DataAnnotations.
-- Suggest repository and service patterns in Infra.
-- Suggest unit test stubs for endpoints.
+- Keep endpoint methods thin, focusing on request handling and response formatting.
+- Keep the API stateless and secure, following best practices for authentication and authorization.
+- Keep domain logic out of the API layer; it should reside in src/UserAuthEntities/
+- Use Dto.cs to create any request/response models needed for the API, but keep them simple and focused on the API contract as c# records.
+- Use dependency injection to manage services and ensure testability of the API endpoints.
+- Use DTOValidator.cs to create any FluentValidation validators needed for the API, but keep them focused on validating the API contract and not containing business logic.
+- Use MappingExtensions.cs to create any mapping extensions needed for the API, but keep them focused on mapping between DTOs and domain models without containing business logic.

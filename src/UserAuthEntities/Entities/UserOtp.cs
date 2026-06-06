@@ -7,6 +7,7 @@ public class UserOtp : IUserToken<string>, IHasTimeExpiry
     public Guid Id { get; set; }
     public Guid UserId {get; set;}
     public UserIdentifierType UserIdentifierType {get; set;}
+    public OtpType OtpType { get; set; }
     public required string Token {get; set;}
     public int ExpiryIn {get; set;}
     public ExpiryTimeSpan ExpirySpan {get; set;} = ExpiryTimeSpan.Seconds;

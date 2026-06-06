@@ -14,7 +14,7 @@ public class AccountOwnerController(
  : ControllerBase
 {
 
-    [HttpPost]
+    [HttpPost("batch")]
     public async Task<ActionResult> CreateAccountOwners(int Id, [FromBody] 
     IEnumerable<CreateAccountOwner> owners)
     {
